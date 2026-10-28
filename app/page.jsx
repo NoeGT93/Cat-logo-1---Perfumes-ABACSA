@@ -10,8 +10,8 @@ const HERO_CODES = ["238-0", "452-0", "235-2"];
 export default function Home() {
   const products = getProducts();
   const withPhoto = products.filter((p) => p.mainImage);
-  // Destacados: primero los que tienen foto, en el orden del Excel.
-  const featured = [...withPhoto, ...products.filter((p) => !p.mainImage)].slice(0, 16);
+  // Destacados: todo el catálogo, primero los que tienen foto (en el orden del Excel).
+  const featured = [...withPhoto, ...products.filter((p) => !p.mainImage)];
   const heroPick = [...HERO_CODES.map((c) => withPhoto.find((p) => p.code === c)).filter(Boolean), ...withPhoto];
   const heroPhotos = [...new Set(heroPick)].slice(0, 3);
 
