@@ -20,7 +20,7 @@ npm run dev        # http://localhost:3000
 | `public/images/products/<código>/` | Fotografías con su nombre original |
 | `lib/config.js` | WhatsApp, filtros, etiquetas de precios |
 | `lib/catalog.js` | Única lectura de datos (reemplazar aquí por API/BD/ERP en el futuro) |
-| `/admin/images` | Administrador de fotografías (solo en `npm run dev`) |
+| `/admin` | Administrador de fotografías (con contraseña; guarda en GitHub) |
 
 ## Actualizar precios desde el Excel
 
@@ -36,13 +36,26 @@ El Excel nunca se modifica. Campos vacíos → `null`; un precio `null` no se mu
 
 ## Fotografías
 
-- **Desde el navegador:** `npm run dev` → `/admin/images` → elegir producto → “Agregar fotografías”, “Hacer principal”, “Quitar” (quita la asociación, no borra el archivo).
+- **Desde la web:** `https://cat-logo-1-perfumes-abacsa.vercel.app/admin` → contraseña → elegir producto → “Elegir fotos” → revisar y marcar la principal → “Publicar”. También “Hacer principal” y “Quitar”.
+  Cada acción es un commit en este repositorio (`public/images/products/<código>/` + `data/product-images.json`) y Vercel republica en ≈ 1 minuto. El navegador reduce las fotos a 1600 px (JPG) antes de subirlas.
+- **En local:** `npm run dev` → `/admin` (sin contraseña si no hay `ADMIN_PASSWORD`; guarda en el disco, luego hacer commit).
 - **Desde la terminal / Claude:**
   ```bash
   node scripts/assign-images.mjs 595-0 fotos/DSC_5736.jpg fotos/DSC_5737.jpg --main DSC_5736.jpg
   ```
 
-Productos sin foto muestran un placeholder. Después de agregar fotos, hacer commit de `public/images/products/` y `data/product-images.json`.
+Productos sin foto muestran un placeholder.
+
+### Configuración del admin web (Vercel → Settings → Environment Variables)
+
+| Variable | Valor |
+| --- | --- |
+| `ADMIN_PASSWORD` | Contraseña del admin (larga; cambiarla cierra todas las sesiones) |
+| `GITHUB_TOKEN` | Token *fine-grained* de GitHub, solo para este repositorio, permiso **Contents: Read and write** |
+| `GITHUB_REPO` | `NoeGT93/Cat-logo-1---Perfumes-ABACSA` |
+| `GITHUB_BRANCH` | `main` (opcional) |
+
+Después de guardarlas: Deployments → último → Redeploy. Las miniaturas del admin se leen de `raw.githubusercontent.com` (el repositorio debe seguir siendo público). Pruebas: `npm test`.
 
 ## Precios
 

@@ -6,7 +6,7 @@
     "build": "next build",
     "start": "next start",
     "import": "node scripts/import-excel.mjs",
-    "test": "node scripts/test-pricing.mjs"
+    "test": "node scripts/test-pricing.mjs && node scripts/test-admin-auth.mjs && node scripts/test-admin-github.mjs"
   },
   "dependencies": {
     "next": "^15.5.28",
