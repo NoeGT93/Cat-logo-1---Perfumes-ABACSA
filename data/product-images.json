@@ -74,5 +74,11 @@
       "/images/products/213-0/213_3_.jpg",
       "/images/products/213-0/213_1_.jpg"
     ]
+  },
+  "1007-3": {
+    "mainImage": "/images/products/1007-3/1007-3_2_.jpg",
+    "gallery": [
+      "/images/products/1007-3/1007-3_2_.jpg"
+    ]
   }
 }
