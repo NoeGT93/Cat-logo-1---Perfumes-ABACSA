@@ -67,7 +67,7 @@ export default function Catalog({ products, initialQuery = "", initialCategory =
 
       {results.length ? (
         <div className="grid">
-          {results.map((p, i) => <ProductCard key={p.code} product={p} eager={i < 4} />)}
+          {results.map((p, i) => <ProductCard key={p.code} product={p} eager={i < 2} />)}
         </div>
       ) : (
         <div className="empty">

@@ -1,10 +1,9 @@
 "use client";
 import { useState } from "react";
-import { PRICE_LABELS } from "@/lib/config";
+import { PRICE_LABELS, money } from "@/lib/config";
 import { useCart } from "./Cart";
 import ProductImage from "./ProductImage";
 import QuantitySelector from "./QuantitySelector";
-import { money } from "./ProductCard";
 
 export default function ProductDetail({ product }) {
   const { add } = useCart();

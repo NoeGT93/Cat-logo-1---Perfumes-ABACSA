@@ -44,4 +44,6 @@ Productos sin foto muestran un placeholder. Después de agregar fotos, hacer com
 
 ## Precios
 
-La tarjeta muestra “Desde Q…” (el menor precio disponible). La ficha muestra cada modalidad (Unidad, Docena, Fardo, Distribuidor) solo si existe. El mensaje de WhatsApp no incluye totales: ABACSA confirma disponibilidad, precio final, modalidad y envío.
+La tarjeta muestra el precio por unidad y “Desde Q…” (el menor precio por mayor). La ficha muestra cada modalidad (Unidad, Docena, Fardo, Distribuidor) solo si existe. El pedido suma automáticamente con el precio por unidad y lo presenta como **total estimado**; ABACSA confirma por WhatsApp el precio final según cantidad, disponibilidad y envío.
+
+Las fotos del banner de inicio se eligen en `HERO_CODES` (`app/page.jsx`).

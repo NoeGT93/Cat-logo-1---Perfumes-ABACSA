@@ -1,9 +1,9 @@
 "use client";
 
-export default function QuantitySelector({ value, onChange, min = 1, max = 9999, small }) {
+export default function QuantitySelector({ value, onChange, min = 1, max = 9999, small, block }) {
   const set = (n) => onChange(Math.max(min, Math.min(max, n)));
   return (
-    <div className={`qty${small ? " qty-sm" : ""}`}>
+    <div className={`qty${small ? " qty-sm" : ""}${block ? " qty-block" : ""}`}>
       <button type="button" onClick={() => set(value - 1)} aria-label="Disminuir cantidad" disabled={value <= min && min > 0}>
         −
       </button>
