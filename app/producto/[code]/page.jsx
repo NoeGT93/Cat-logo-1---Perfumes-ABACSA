@@ -1,9 +1,14 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getProduct, getProducts } from "@/lib/catalog";
-import { money, refPrice } from "@/lib/config";
-import ProductDetail from "@/components/ProductDetail";
-import ProductCard from "@/components/ProductCard";
+import { CATEGORIES, money, refPrice } from "@/lib/config";
+import ProductDetail, { RelatedList } from "@/components/ProductDetail";
+
+const Chevron = () => (
+  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
+    <path d="m9 6 6 6-6 6" />
+  </svg>
+);
 
 export function generateStaticParams() {
   return getProducts().map((p) => ({ code: p.code }));
@@ -35,21 +40,25 @@ export default async function ProductPage({ params }) {
   const all = getProducts();
   const product = all.find((p) => p.code === code);
   if (!product) notFound();
+  const cat = CATEGORIES.find((c) => c.key === product.category);
   return (
-    <>
-      <section className="wrap page">
-        <Link href="/catalogo" className="back">← Catálogo</Link>
-        <ProductDetail product={product} />
-      </section>
-      <section className="wrap section related">
-        <div className="section-head">
-          <h2>También te puede interesar</h2>
-          <Link href={`/catalogo${product.category ? `?cat=${product.category}` : ""}`} className="link">Ver más →</Link>
+    <section className="wrap page">
+      <nav className="breadcrumb" aria-label="Ruta">
+        <Link href="/">Inicio</Link>
+        <Chevron />
+        {cat ? <Link href={`/catalogo?cat=${cat.key}`}>{cat.label}</Link> : <Link href="/catalogo">Productos</Link>}
+        <Chevron />
+        <span aria-current="page">{product.name}</span>
+      </nav>
+      <div className="product-layout">
+        <div className="product-main">
+          <ProductDetail product={product} />
         </div>
-        <div className="grid">
-          {related(product, all).map((p) => <ProductCard key={p.code} product={p} />)}
-        </div>
-      </section>
-    </>
+        <aside className="product-related">
+          <h2>Productos relacionados</h2>
+          <RelatedList products={related(product, all)} />
+        </aside>
+      </div>
+    </section>
   );
 }

@@ -1,9 +1,11 @@
 "use client";
 import { useState } from "react";
-import { BUNDLE_QTY, money, priceFor, priceTiers } from "@/lib/config";
-import { useCart } from "./Cart";
+import Link from "next/link";
+import { BUNDLE_QTY, money, priceFor, priceTiers, refPrice } from "@/lib/config";
+import { CartIcon, useCart } from "./Cart";
 import ProductImage from "./ProductImage";
 import QuantitySelector from "./QuantitySelector";
+import { PlusIcon, categoryLabel } from "./ProductCard";
 
 export default function ProductDetail({ product }) {
   const { add, qtyOf } = useCart();
@@ -16,13 +18,11 @@ export default function ProductDetail({ product }) {
   const quote = priceFor(product, inCart + qty);
   const { bundle, distributor } = product.prices;
   const extraDistributor = bundle != null && distributor != null && distributor !== bundle;
+  const category = categoryLabel(product.category);
 
   return (
     <div className="detail">
       <div className="gallery">
-        <div className="gallery-main">
-          <ProductImage key={images[active]} src={images[active]} alt={product.name} eager sizes="(max-width: 880px) 100vw, 640px" />
-        </div>
         {images.length > 1 && (
           <div className="thumbs" role="group" aria-label="Fotografías">
             {images.map((src, i) => (
@@ -32,37 +32,36 @@ export default function ProductDetail({ product }) {
             ))}
           </div>
         )}
+        <div className="gallery-main">
+          <ProductImage key={images[active]} src={images[active]} alt={product.name} eager sizes="(max-width: 880px) 100vw, 560px" />
+        </div>
       </div>
 
       <div className="info">
-        <p className="code">Código {product.code}</p>
+        {product.brand && <p className="card-brand">{product.brand}</p>}
         <h1>{product.name}</h1>
+        <p className="code">Código {product.code}</p>
+        {category && <span className="pill">{category.replace(/s$/, "")}</span>}
         <p className="muted desc">{product.description}</p>
-        <dl className="meta">
-          {product.brand && <><dt>Marca</dt><dd>{product.brand}</dd></>}
-          {product.family && <><dt>Familia</dt><dd>{product.family}</dd></>}
-        </dl>
 
         {tiers.length > 0 ? (
           <table className="prices">
-            <caption>Precio según cantidad (por producto)</caption>
             <tbody>
               {tiers.map((t, i) => {
                 const max = tiers[i + 1]?.min - 1;
                 return (
                   <tr key={t.key} data-active={quote.tier === t.label}>
                     <th scope="row">
-                      {t.label}
-                      <span className="tier-range">{max ? `${t.min}–${max} u.` : `${t.min}+ u.`}</span>
+                      {t.label} <span className="tier-range">{max ? `${t.min}–${max} u.` : `${t.min}+ u.`}</span>
                     </th>
-                    <td>{money(t.price)} <span className="muted">c/u</span></td>
+                    <td>{money(t.price)}</td>
                   </tr>
                 );
               })}
               {extraDistributor && (
                 <tr>
-                  <th scope="row">Distribuidor<span className="tier-range">{BUNDLE_QTY}+ u.</span></th>
-                  <td>{money(distributor)} <span className="muted">c/u</span></td>
+                  <th scope="row">Distribuidor <span className="tier-range">{BUNDLE_QTY}+ u.</span></th>
+                  <td>{money(distributor)}</td>
                 </tr>
               )}
             </tbody>
@@ -71,17 +70,50 @@ export default function ProductDetail({ product }) {
           <p className="muted">Precio a consultar por WhatsApp.</p>
         )}
         <p className="note">
-          {inCart > 0 && <>Ya tienes {inCart} en tu pedido. </>}ABACSA confirmará el precio final por WhatsApp.
+          Los precios pueden variar según cantidad de compra.{inCart > 0 && ` Ya tienes ${inCart} en tu pedido.`}
         </p>
 
         <div className="buy-bar">
           <QuantitySelector value={qty} onChange={setQty} />
           <button className="btn btn-primary btn-buy" onClick={(e) => add(product, qty, document.querySelector(".gallery-main img") || e.currentTarget)}>
+            <CartIcon size={20} />
             <span>Agregar al pedido</span>
-            {quote.price != null && <span className="btn-sub">{money(quote.price * qty)} · {quote.tier.toLowerCase()}</span>}
+            {quote.price != null && <span className="btn-sub">{money(quote.price * qty)}</span>}
           </button>
         </div>
       </div>
     </div>
+  );
+}
+
+// Lista compacta de relacionados (columna lateral de la ficha).
+export function RelatedList({ products }) {
+  const { add } = useCart();
+  return (
+    <ul className="related-list">
+      {products.map((p) => {
+        const href = `/producto/${encodeURIComponent(p.code)}`;
+        const price = refPrice(p);
+        return (
+          <li key={p.code} className="related-item">
+            <Link href={href} className="related-img">
+              <ProductImage src={p.mainImage} alt={p.name} sizes="72px" />
+            </Link>
+            <div className="related-info">
+              <Link href={href} className="related-name">{p.name}</Link>
+              <p className="code">Código {p.code}</p>
+              {price != null && <p className="related-price">{money(price)} <span className="muted">c/u</span></p>}
+            </div>
+            <button
+              className="related-add"
+              aria-label={`Agregar ${p.name} al pedido`}
+              onClick={(e) => add(p, 1, e.currentTarget.closest(".related-item").querySelector("img") || e.currentTarget)}
+            >
+              <PlusIcon />
+            </button>
+          </li>
+        );
+      })}
+    </ul>
   );
 }

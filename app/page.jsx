@@ -1,32 +1,19 @@
 import Link from "next/link";
 import Image from "next/image";
 import { getProducts } from "@/lib/catalog";
-import { BUNDLE_QTY, CATEGORIES, DOZEN_QTY, WHATSAPP_NUMBER, money } from "@/lib/config";
-import ProductCard from "@/components/ProductCard";
-import { SearchIcon } from "@/components/Catalog";
-import { WhatsAppIcon } from "@/components/Cart";
-import { AddIcon, BrowseIcon, ConfirmIcon, SendIcon } from "@/components/StepIcons";
+import { CATEGORIES } from "@/lib/config";
+import ProductCarousel from "@/components/ProductCarousel";
 
-// Productos cuyas fotos se muestran en el banner (cambiar aquí).
-const HERO_CODES = ["238-0", "235-2", "642-0"];
-
-const STEPS = [
-  { title: "Elige", text: "Busca en el catálogo", icon: <BrowseIcon /> },
-  { title: "Agrega", text: "Docena y fardo con mejor precio", icon: <AddIcon /> },
-  { title: "Envía", text: "Tu pedido por WhatsApp", icon: <SendIcon /> },
-  { title: "Confirma", text: "Precio final, disponibilidad y envío", icon: <ConfirmIcon /> },
-];
+// Productos cuyas fotos (caja) forman la composición del banner (cambiar aquí).
+const HERO_CODES = ["238-0", "452-0", "235-2"];
 
 export default function Home() {
   const products = getProducts();
   const withPhoto = products.filter((p) => p.mainImage);
   // Destacados: primero los que tienen foto, en el orden del Excel.
-  const featured = [...withPhoto, ...products.filter((p) => !p.mainImage)].slice(0, 8);
-  // Banner: fotos reales de producto (la última de la galería suele ser los frascos juntos).
+  const featured = [...withPhoto, ...products.filter((p) => !p.mainImage)].slice(0, 10);
   const heroPick = [...HERO_CODES.map((c) => withPhoto.find((p) => p.code === c)).filter(Boolean), ...withPhoto];
-  const heroPhotos = [...new Set(heroPick)].slice(0, 3).map((p) => ({ src: p.gallery.at(-1) || p.mainImage, alt: p.name }));
-
-  const minPrice = Math.min(...products.map((p) => p.fromPrice).filter((v) => v != null));
+  const heroPhotos = [...new Set(heroPick)].slice(0, 3);
 
   const categories = CATEGORIES.map((c) => {
     const inCat = products.filter((p) => p.category === c.key);
@@ -38,123 +25,69 @@ export default function Home() {
       <section className="hero">
         <div className="wrap hero-grid">
           <div className="hero-copy">
-            <p className="eyebrow">Distribuidora en Quetzaltenango</p>
-            <h1>
-              Todo lo que necesitas para <span className="hero-hl">surtir tu negocio.</span>
-            </h1>
+            <p className="eyebrow">Perfumes y kits</p>
+            <h1>Todo lo que necesitas para surtir tu negocio.</h1>
             <p className="lead">Encuentra variedad, buenos precios y opciones para comprar al detalle o por mayor.</p>
-            <ul className="hero-points">
-              <li><CheckIcon /> Precio de docena desde {DOZEN_QTY} unidades</li>
-              <li><CheckIcon /> Precio de fardo desde {BUNDLE_QTY} unidades</li>
-              <li><CheckIcon /> Pide por WhatsApp, sin registrarte</li>
-            </ul>
-            {/* En escritorio el buscador ya está en el header */}
-            <form action="/catalogo" className="search search-hero" role="search">
-              <SearchIcon />
-              <input type="search" name="q" enterKeyHint="search" placeholder="Busca por nombre, código o marca" aria-label="Buscar productos" />
-            </form>
-            <div className="hero-actions">
-              <Link href="/catalogo" className="btn btn-accent btn-hero">
+            <div className="hero-row">
+              <Link href="/catalogo" className="btn btn-primary btn-hero">
                 Ver catálogo <ArrowIcon />
               </Link>
-              <a href={`https://wa.me/${WHATSAPP_NUMBER}`} target="_blank" rel="noopener noreferrer" className="btn btn-ghost">
-                <WhatsAppIcon size={18} /> Pedir por WhatsApp
-              </a>
+              <ul className="hero-features">
+                <li><TagIcon /><span>Precios<br />especiales</span></li>
+                <li><ChatIcon /><span>Pedidos<br />por WhatsApp</span></li>
+                <li><ShieldIcon /><span>Variedad<br />para tu negocio</span></li>
+              </ul>
             </div>
           </div>
           {heroPhotos.length > 0 && (
-            <div className="hero-media">
-              <div className="hero-photos" aria-hidden="true">
-                {heroPhotos.map((p, i) => (
-                  <div key={p.src} className={`hero-photo hero-photo-${i}`}>
-                    <Image src={p.src} alt="" fill sizes={i === 0 ? "(max-width: 900px) 100vw, 560px" : "(max-width: 900px) 50vw, 280px"} priority={i === 0} />
-                  </div>
-                ))}
-              </div>
-              {minPrice != null && (
-                <p className="hero-badge">
-                  <strong>{products.length} productos</strong>
-                  <span>desde {money(minPrice)} c/u</span>
-                </p>
-              )}
+            <div className="hero-stack" aria-hidden="true">
+              {heroPhotos.map((p, i) => (
+                <div key={p.code} className={`hero-tile hero-tile-${i}`}>
+                  <Image src={p.mainImage} alt="" fill sizes="(max-width: 900px) 50vw, 340px" priority={i === 0} />
+                </div>
+              ))}
             </div>
           )}
-        </div>
-      </section>
-
-      <section className="wrap steps" aria-labelledby="steps-title">
-        <div className="steps-card">
-          <div className="steps-head">
-            <p className="eyebrow eyebrow-accent">Pedir es muy fácil</p>
-            <h2 id="steps-title">Así de fácil</h2>
-          </div>
-          <ol>
-            {STEPS.map((s, i) => (
-              <li key={s.title}>
-                <span className="step-icon">{s.icon}</span>
-                <h3><span className="step-num">{i + 1}.</span> {s.title}</h3>
-                <p>{s.text}</p>
-              </li>
-            ))}
-          </ol>
-        </div>
-      </section>
-
-      <section className="wrap section">
-        <div className="section-head">
-          <h2>Compra por tipo</h2>
-          <Link href="/catalogo" className="link">Ver todo →</Link>
-        </div>
-        <div className="cat-grid">
-          {categories.map((c) => (
-            <Link key={c.key} href={`/catalogo?cat=${c.key}`} className="cat-tile">
-              <span className="cat-img">
-                {c.image && <Image src={c.image} alt="" fill sizes="(max-width: 720px) 50vw, 300px" />}
-              </span>
-              <span className="cat-text">
-                <strong>{c.label}</strong>
-                <span>{c.count} {c.count === 1 ? "producto" : "productos"}</span>
-              </span>
-            </Link>
-          ))}
         </div>
       </section>
 
       <section className="wrap section">
         <div className="section-head">
           <h2>Productos destacados</h2>
-          <Link href="/catalogo" className="link">Ver catálogo →</Link>
+          <Link href="/catalogo" className="link">Ver catálogo <ArrowIcon /></Link>
         </div>
-        <div className="grid">
-          {featured.map((p, i) => <ProductCard key={p.code} product={p} eager={i < 2} />)}
-        </div>
+        <ProductCarousel products={featured} />
       </section>
 
-      <section className="wrap section">
-        <div className="wholesale">
-          <div>
-            <h2>¿Tienes tienda o vendes por catálogo?</h2>
-            <p>Precios por docena, fardo y distribuidor. Pregúntanos por tu pedido al por mayor.</p>
-          </div>
-          <a href={`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent("Hola ABACSA, quiero información sobre precios por mayor.")}`}
-            target="_blank" rel="noopener noreferrer" className="btn btn-whatsapp btn-auto">
-            <WhatsAppIcon /> Consultar precios por mayor
-          </a>
+      <section className="wrap section" id="categorias">
+        <div className="section-head">
+          <h2>Compra por categoría</h2>
+        </div>
+        <div className="cat-grid">
+          {categories.map((c) => (
+            <Link key={c.key} href={`/catalogo?cat=${c.key}`} className="cat-tile">
+              <span className="cat-img">
+                {c.image ? <Image src={c.image} alt="" fill sizes="96px" /> : <BoxIcon />}
+              </span>
+              <span className="cat-text">
+                <strong>{c.label}</strong>
+                <span>Ver productos <ArrowIcon /></span>
+              </span>
+            </Link>
+          ))}
         </div>
       </section>
     </>
   );
 }
 
-
-const CheckIcon = () => (
-  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-    <path d="m5 12.5 4.5 4.5L19 7.5" />
+const Svg = ({ children, size = 18, sw = 1.8 }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={sw} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    {children}
   </svg>
 );
-
-const ArrowIcon = () => (
-  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-    <path d="M5 12h14M13 6l6 6-6 6" />
-  </svg>
-);
+const ArrowIcon = () => <Svg><path d="M5 12h14M13 6l6 6-6 6" /></Svg>;
+const TagIcon = () => <Svg size={24} sw={1.5}><path d="M3 12V4h8l9.5 9.5-8 8L3 12Z" /><circle cx="7.5" cy="8.5" r="1.3" /></Svg>;
+const ChatIcon = () => <Svg size={24} sw={1.5}><path d="M12 4C7 4 3.5 7.3 3.5 11.5c0 2.2 1 4.1 2.6 5.5L5.5 21l4-1.9c.8.2 1.6.3 2.5.3 5 0 8.5-3.3 8.5-7.9S17 4 12 4Z" /></Svg>;
+const ShieldIcon = () => <Svg size={24} sw={1.5}><path d="M12 3 4.5 6v5.5c0 4.5 3.2 8.2 7.5 9.5 4.3-1.3 7.5-5 7.5-9.5V6L12 3Z" /><path d="m8.8 12 2.2 2.2 4.2-4.4" /></Svg>;
+const BoxIcon = () => <Svg size={28} sw={1.4}><path d="M4 8 12 4l8 4v8l-8 4-8-4V8Z" /><path d="m4 8 8 4 8-4M12 12v8" /></Svg>;

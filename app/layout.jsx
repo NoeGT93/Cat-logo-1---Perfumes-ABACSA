@@ -21,7 +21,7 @@ export const viewport = {
   initialScale: 1,
   viewportFit: "cover",
   interactiveWidget: "resizes-content",
-  themeColor: "#08465d",
+  themeColor: "#ffffff",
 };
 
 export default function RootLayout({ children }) {
@@ -31,15 +31,6 @@ export default function RootLayout({ children }) {
     <html lang="es" className={`${sans.variable} ${display.variable}`}>
       <body>
         <CartProvider products={products}>
-          <div className="topbar">
-            <div className="wrap topbar-row">
-              <span>Compra al detalle o por mayor</span>
-              <span className="topbar-sep" aria-hidden="true">·</span>
-              <span>Precio especial por docena y fardo</span>
-              <span className="topbar-sep topbar-hide-sm" aria-hidden="true">·</span>
-              <span className="topbar-hide-sm">Quetzaltenango, Guatemala</span>
-            </div>
-          </div>
           <Header />
           <main className="main">{children}</main>
           <footer className="site-footer">

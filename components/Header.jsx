@@ -1,67 +1,83 @@
 "use client";
-import { Suspense } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
-import { usePathname, useSearchParams } from "next/navigation";
-import { CATEGORIES, WHATSAPP_DISPLAY, WHATSAPP_NUMBER } from "@/lib/config";
-import { CartButton, WhatsAppIcon } from "./Cart";
+import { usePathname } from "next/navigation";
+import { CATEGORIES } from "@/lib/config";
+import { CartButton } from "./Cart";
 import { SearchIcon } from "./Catalog";
 
-const NAV = [{ key: "", label: "Todos los productos" }, ...CATEGORIES];
+const LINKS = [
+  { href: "/", label: "Inicio" },
+  { href: "/catalogo", label: "Productos" },
+  { href: "/#categorias", label: "Categorías" },
+];
 
-export default function Header() {
+function Search({ className }) {
   return (
-    <header className="site-header">
-      <div className="wrap header-main">
-        <Link href="/" className="logo" aria-label="ABACSA, inicio">
-          <img src="/brand/mark.png" alt="" width="30" height="36" />
-          <img src="/brand/wordmark.png" alt="ABACSA" width="85" height="16" />
-        </Link>
-
-        <form action="/catalogo" className="header-search" role="search">
-          <SearchIcon />
-          <input type="search" name="q" enterKeyHint="search" placeholder="¿Qué estás buscando? Nombre, código o marca" aria-label="Buscar productos" />
-        </form>
-
-        <a className="header-contact" href={`https://wa.me/${WHATSAPP_NUMBER}`} target="_blank" rel="noopener noreferrer">
-          <span className="header-contact-icon"><WhatsAppIcon size={20} /></span>
-          <span>
-            <small>Pedidos por WhatsApp</small>
-            <strong>{WHATSAPP_DISPLAY}</strong>
-          </span>
-        </a>
-
-        <Link href="/catalogo" className="header-icon-link" aria-label="Buscar productos">
-          <SearchIcon />
-        </Link>
-        <CartButton />
-      </div>
-
-      <nav className="header-nav" aria-label="Categorías">
-        <div className="wrap header-nav-row">
-          <Suspense fallback={<NavLinks />}>
-            <ActiveNavLinks />
-          </Suspense>
-        </div>
-      </nav>
-    </header>
+    <form action="/catalogo" className={className} role="search">
+      <SearchIcon />
+      <input type="search" name="q" enterKeyHint="search" placeholder="Buscar por código, nombre o marca…" aria-label="Buscar productos" />
+    </form>
   );
 }
 
-function ActiveNavLinks() {
+export default function Header() {
   const pathname = usePathname();
-  const cat = useSearchParams().get("cat") || "";
-  return <NavLinks active={pathname === "/catalogo" ? cat : null} />;
+  const [menu, setMenu] = useState(false);
+  useEffect(() => setMenu(false), [pathname]);
+
+  return (
+    <>
+      <header className="site-header">
+        <div className="wrap header-main">
+          <Link href="/" className="logo" aria-label="ABACSA, inicio">
+            <img src="/brand/mark.png" alt="" width="30" height="36" />
+            <span className="logo-text">
+              <img src="/brand/wordmark.png" alt="ABACSA" width="96" height="18" />
+              <span>Distribuidora</span>
+            </span>
+          </Link>
+
+          <Search className="header-search" />
+
+          <nav className="header-links" aria-label="Principal">
+            {LINKS.map((l) => (
+              <Link key={l.href} href={l.href} aria-current={pathname === l.href ? "page" : undefined}>
+                {l.label}
+              </Link>
+            ))}
+          </nav>
+
+          <CartButton />
+          <button className="menu-btn" aria-label="Menú" aria-expanded={menu} aria-controls="mobile-menu" onClick={() => setMenu((m) => !m)}>
+            <MenuIcon open={menu} />
+          </button>
+        </div>
+
+        {menu && (
+          <nav id="mobile-menu" className="mobile-menu">
+            <div className="wrap">
+              {LINKS.map((l) => (
+                <Link key={l.href} href={l.href} onClick={() => setMenu(false)}>{l.label}</Link>
+              ))}
+              <p className="mobile-menu-label">Categorías</p>
+              {CATEGORIES.map((c) => (
+                <Link key={c.key} href={`/catalogo?cat=${c.key}`} onClick={() => setMenu(false)}>{c.label}</Link>
+              ))}
+            </div>
+          </nav>
+        )}
+      </header>
+      {/* En móvil el buscador va debajo del header y se desplaza con la página */}
+      <div className="wrap mobile-search">
+        <Search className="header-search" />
+      </div>
+    </>
+  );
 }
 
-function NavLinks({ active = null }) {
-  return NAV.map((c) => (
-    <Link
-      key={c.key || "all"}
-      href={c.key ? `/catalogo?cat=${c.key}` : "/catalogo"}
-      className="header-nav-link"
-      aria-current={active === c.key ? "page" : undefined}
-    >
-      {c.label}
-    </Link>
-  ));
-}
+const MenuIcon = ({ open }) => (
+  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" aria-hidden="true">
+    {open ? <path d="M6 6l12 12M18 6 6 18" /> : <path d="M4 7h16M4 12h16M4 17h16" />}
+  </svg>
+);

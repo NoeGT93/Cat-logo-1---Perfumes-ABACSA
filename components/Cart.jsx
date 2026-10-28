@@ -145,79 +145,131 @@ function flyToCart(source) {
   );
 }
 
-function OrderPanel({ onClose }) {
-  const { items, count, total, missingPrice, setQty, remove, clear } = useCart();
+// Lista del pedido (drawer y página /pedido).
+function OrderLines({ onNavigate }) {
+  const { items, setQty, remove } = useCart();
   return (
-    <div className="order">
-      <header className="order-head">
-        <div>
-          <h2>Tu pedido</h2>
-          <p className="muted">{count === 0 ? "Sin productos" : `${count} ${count === 1 ? "producto" : "productos"}`}</p>
-        </div>
+    <ul className="order-list">
+      {items.map((i) => (
+        <li key={i.code} className="line">
+          <Link href={`/producto/${encodeURIComponent(i.code)}`} className="line-img" onClick={onNavigate}>
+            <ProductImage src={i.mainImage} alt={i.name} sizes="64px" />
+          </Link>
+          <div className="line-info">
+            <p className="line-name">{i.name}</p>
+            <p className="code">
+              Código {i.code}
+              {i.price != null && <> · <span className="tier-tag">{i.tier}</span> {money(i.price)} c/u</>}
+            </p>
+            {i.next && i.next.need <= 6 && (
+              <button className="tier-hint" onClick={() => setQty(i.code, i.qty + i.next.need)}>
+                Agrega {i.next.need} más y paga {money(i.next.price)} c/u ({i.next.label.toLowerCase()})
+              </button>
+            )}
+          </div>
+          <div className="line-side">
+            <div className="line-controls">
+              <QuantitySelector value={i.qty} onChange={(q) => setQty(i.code, q)} min={0} small />
+              <button className="line-remove" onClick={() => remove(i.code)} aria-label={`Quitar ${i.name}`}>
+                <TrashIcon />
+              </button>
+            </div>
+            <span className="line-total">{i.lineTotal != null ? money(i.lineTotal) : "Consultar"}</span>
+          </div>
+        </li>
+      ))}
+    </ul>
+  );
+}
+
+// Resumen: totales, aviso de precios y envío por WhatsApp.
+function OrderSummary({ onContinue }) {
+  const { items, count, total, missingPrice } = useCart();
+  return (
+    <div className="summary">
+      <h2 className="summary-title">Resumen</h2>
+      <div className="summary-row"><span>Total de productos</span><strong>{count}</strong></div>
+      <div className="summary-row summary-total"><span>Total estimado</span><strong>{money(total)}{missingPrice && "+"}</strong></div>
+      <p className="summary-note">
+        <InfoIcon />
+        <span>Los precios pueden variar según cantidad de compra (12+ docena, 24+ fardo). Te confirmaremos disponibilidad y precio final por WhatsApp.</span>
+      </p>
+      <a className="btn btn-whatsapp" href={whatsappUrl(items, total)} target="_blank" rel="noopener noreferrer">
+        <WhatsAppIcon /> Solicitar por WhatsApp
+      </a>
+      {onContinue ? (
+        <button className="continue-link" onClick={onContinue}><ArrowLeftIcon /> Continuar comprando</button>
+      ) : (
+        <Link href="/catalogo" className="continue-link"><ArrowLeftIcon /> Continuar comprando</Link>
+      )}
+    </div>
+  );
+}
+
+function OrderHead({ onClose }) {
+  const { count, clear } = useCart();
+  return (
+    <header className="order-head">
+      <div>
+        <h2>Tu pedido</h2>
+        <p className="muted">{count === 0 ? "Sin productos" : `${count} ${count === 1 ? "producto" : "productos"}`}</p>
+      </div>
+      <div className="order-head-actions">
+        {count > 0 && <button className="link-btn" onClick={() => confirm("¿Vaciar el pedido?") && clear()}>Vaciar</button>}
         {onClose && (
           <button className="icon-btn" onClick={onClose} aria-label="Cerrar">
             <CloseIcon />
           </button>
         )}
-      </header>
+      </div>
+    </header>
+  );
+}
 
+function OrderEmpty({ onNavigate }) {
+  return (
+    <div className="order-empty">
+      <BagIcon size={36} />
+      <p>Aún no has agregado productos.</p>
+      <Link href="/catalogo" className="btn btn-primary" onClick={onNavigate}>Ver catálogo</Link>
+    </div>
+  );
+}
+
+// Drawer (se abre desde el ícono del pedido).
+function OrderPanel({ onClose }) {
+  const { items } = useCart();
+  return (
+    <div className="order">
+      <OrderHead onClose={onClose} />
       {items.length === 0 ? (
-        <div className="order-empty">
-          <BagIcon size={36} />
-          <p>Aún no has agregado productos.</p>
-          <Link href="/catalogo" className="btn btn-secondary" onClick={onClose}>
-            Ver catálogo
-          </Link>
-        </div>
+        <OrderEmpty onNavigate={onClose} />
       ) : (
         <>
-          <ul className="order-list">
-            {items.map((i) => (
-              <li key={i.code} className="line">
-                <Link href={`/producto/${encodeURIComponent(i.code)}`} className="line-img" onClick={onClose}>
-                  <ProductImage src={i.mainImage} alt={i.name} sizes="64px" />
-                </Link>
-                <div className="line-info">
-                  <div className="line-top">
-                    <p className="line-name">{i.name}</p>
-                    <button className="line-remove" onClick={() => remove(i.code)} aria-label={`Quitar ${i.name}`}>
-                      <CloseIcon size={16} />
-                    </button>
-                  </div>
-                  <p className="code">
-                    Código {i.code}
-                    {i.price != null && <> · <span className="tier-tag">{i.tier}</span> {money(i.price)} c/u</>}
-                  </p>
-                  <div className="line-actions">
-                    <QuantitySelector value={i.qty} onChange={(q) => setQty(i.code, q)} min={0} small />
-                    <span className="line-total">{i.lineTotal != null ? money(i.lineTotal) : "Consultar"}</span>
-                  </div>
-                  {i.next && i.next.need <= 6 && (
-                    <button className="tier-hint" onClick={() => setQty(i.code, i.qty + i.next.need)}>
-                      Agrega {i.next.need} más y paga {money(i.next.price)} c/u ({i.next.label.toLowerCase()})
-                    </button>
-                  )}
-                </div>
-              </li>
-            ))}
-          </ul>
-          <footer className="order-foot">
-            <div className="total-row">
-              <span>Total estimado</span>
-              <strong>{money(total)}{missingPrice && "+"}</strong>
-            </div>
-            <p className="note">
-              Precio por producto: 1–11 u. unidad, 12+ docena, 24+ fardo/distribuidor. ABACSA te confirma el precio final, disponibilidad y envío.
-            </p>
-            <a className="btn btn-whatsapp" href={whatsappUrl(items, total)} target="_blank" rel="noopener noreferrer">
-              <WhatsAppIcon /> Solicitar por WhatsApp
-            </a>
-            <div className="order-foot-row">
-              {onClose ? <button className="link-btn" onClick={onClose}>Seguir comprando</button> : <span />}
-              <button className="link-btn" onClick={() => confirm("¿Vaciar el pedido?") && clear()}>Vaciar pedido</button>
-            </div>
-          </footer>
+          <OrderLines onNavigate={onClose} />
+          <div className="order-foot">
+            <OrderSummary onContinue={onClose} />
+            <Link href="/pedido" className="link-btn order-full" onClick={onClose}>Ver pedido en pantalla completa</Link>
+          </div>
         </>
+      )}
+    </div>
+  );
+}
+
+// Página /pedido: lista a la izquierda, resumen a la derecha.
+export function OrderPage() {
+  const { items } = useCart();
+  return (
+    <div className="order-page">
+      <section className="order-page-list">
+        <OrderHead />
+        {items.length === 0 ? <OrderEmpty /> : <OrderLines />}
+      </section>
+      {items.length > 0 && (
+        <aside className="order-page-summary">
+          <OrderSummary />
+        </aside>
       )}
     </div>
   );
@@ -251,18 +303,22 @@ export const whatsappUrl = (items, total) =>
 export function CartButton() {
   const { count, total, show } = useCart();
   return (
-    <button className="cart-btn" onClick={show} aria-label={`Ver pedido, ${count} productos`}>
+    <button className="cart-btn" onClick={show} aria-label={`Ver pedido, ${count} productos${count ? `, ${money(total)}` : ""}`}>
       <span className="cart-icon" id="cart-icon">
-        <BagIcon size={22} />
+        <CartIcon />
         {count > 0 && <span className="cart-count">{count > 99 ? "99+" : count}</span>}
-      </span>
-      <span className="cart-text">
-        <span>Mi pedido</span>
-        <strong>{count > 0 ? money(total) : "Vacío"}</strong>
       </span>
     </button>
   );
 }
+
+export const CartIcon = ({ size = 24 }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <path d="M3 4h2.2l2.1 10.2a1.5 1.5 0 0 0 1.5 1.2h8.6a1.5 1.5 0 0 0 1.5-1.1L20.6 8H6.4" />
+    <circle cx="9.5" cy="19.5" r="1.3" />
+    <circle cx="17" cy="19.5" r="1.3" />
+  </svg>
+);
 
 export const BagIcon = ({ size = 20 }) => (
   <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" aria-hidden="true">
@@ -283,5 +339,21 @@ const CheckIcon = () => (
 export const WhatsAppIcon = ({ size = 20 }) => (
   <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
     <path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2Zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.2-.4.2-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.8 11.9 11.9 0 0 0 4.6 4c1.7.7 2.4.8 3.2.7.5-.1 1.5-.6 1.7-1.2.2-.6.2-1.1.2-1.2-.1-.1-.3-.2-.5-.3Z" />
+  </svg>
+);
+const TrashIcon = () => (
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <path d="M4 7h16M10 11v6M14 11v6M6 7l1 12a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2l1-12M9 7V4h6v3" />
+  </svg>
+);
+const InfoIcon = () => (
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" aria-hidden="true">
+    <circle cx="12" cy="12" r="9" />
+    <path d="M12 11v5M12 8h.01" strokeLinecap="round" />
+  </svg>
+);
+const ArrowLeftIcon = () => (
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <path d="M19 12H5M11 18l-6-6 6-6" />
   </svg>
 );
