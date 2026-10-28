@@ -1,0 +1,562 @@
+[
+  {
+    "id": 1,
+    "code": "595-0",
+    "description": "O.R. EST. KIT FLEUR D VIE",
+    "quantity": 1,
+    "prices": {
+      "unit": 75,
+      "dozen": 65,
+      "bundle": 60,
+      "distributor": null
+    },
+    "family": "PERFUME",
+    "brand": "MARLEN LAMUR"
+  },
+  {
+    "id": 2,
+    "code": "213-0",
+    "description": "EST. KIT MARLEN AMORI",
+    "quantity": 1,
+    "prices": {
+      "unit": 75,
+      "dozen": 65,
+      "bundle": 60,
+      "distributor": null
+    },
+    "family": "PERFUME",
+    "brand": "MARLEN LAMUR"
+  },
+  {
+    "id": 3,
+    "code": "235-12",
+    "description": "EST. DUO AVEC AMOR/LOVE AMOR",
+    "quantity": 1,
+    "prices": {
+      "unit": 85,
+      "dozen": 75,
+      "bundle": null,
+      "distributor": 68
+    },
+    "family": "PERFUME",
+    "brand": "MARLEN LAMUR"
+  },
+  {
+    "id": 4,
+    "code": "1007-3",
+    "description": "COLONIA MORTON X 105ML",
+    "quantity": 1,
+    "prices": {
+      "unit": 60,
+      "dozen": 55,
+      "bundle": 50,
+      "distributor": null
+    },
+    "family": "PERFUME",
+    "brand": "MARLEN LAMUR"
+  },
+  {
+    "id": 5,
+    "code": "235-11",
+    "description": "EST. DUO MON CRITERE/FLORENZZA 105ML",
+    "quantity": 1,
+    "prices": {
+      "unit": 100,
+      "dozen": 85,
+      "bundle": null,
+      "distributor": 80
+    },
+    "family": "PERFUME",
+    "brand": "MARLEN LAMUR"
+  },
+  {
+    "id": 6,
+    "code": "64-0",
+    "description": "EST. KIT VICTOR GARCIA",
+    "quantity": 1,
+    "prices": {
+      "unit": 55,
+      "dozen": 45,
+      "bundle": 43,
+      "distributor": null
+    },
+    "family": "PERFUME",
+    "brand": "MARLEN LAMUR"
+  },
+  {
+    "id": 7,
+    "code": "142-0",
+    "description": "EST. KIT MUSK AT NIGHT",
+    "quantity": 1,
+    "prices": {
+      "unit": 75,
+      "dozen": 65,
+      "bundle": 60,
+      "distributor": null
+    },
+    "family": "PERFUME",
+    "brand": "MARLEN LAMUR"
+  },
+  {
+    "id": 8,
+    "code": "882-9",
+    "description": "EST. KIT DYNAMIC ULTRA 150ML KIT 2",
+    "quantity": 1,
+    "prices": {
+      "unit": 70,
+      "dozen": 65,
+      "bundle": null,
+      "distributor": 60
+    },
+    "family": "PERFUME",
+    "brand": "MARLEN LAMUR"
+  },
+  {
+    "id": 9,
+    "code": "164-0",
+    "description": "EST. KIT MON CRITERE IRRESISTIBLE",
+    "quantity": 1,
+    "prices": {
+      "unit": 75,
+      "dozen": 65,
+      "bundle": 60,
+      "distributor": null
+    },
+    "family": "PERFUME",
+    "brand": "MARLEN LAMUR"
+  },
+  {
+    "id": 10,
+    "code": "619-0",
+    "description": "EST. KIT MON CRITERE NO.2",
+    "quantity": 1,
+    "prices": {
+      "unit": 75,
+      "dozen": 65,
+      "bundle": null,
+      "distributor": 60
+    },
+    "family": "PERFUME",
+    "brand": "MARLEN LAMUR"
+  },
+  {
+    "id": 11,
+    "code": "612-0",
+    "description": "EST. KIT MORTON CONVIXION 110ML COD 612-0",
+    "quantity": 1,
+    "prices": {
+      "unit": 75,
+      "dozen": 65,
+      "bundle": 60,
+      "distributor": null
+    },
+    "family": "PERFUME",
+    "brand": "MARLEN LAMUR"
+  },
+  {
+    "id": 12,
+    "code": "58-0",
+    "description": "EST. KIT CRITERE DOR COD 58-0",
+    "quantity": 1,
+    "prices": {
+      "unit": 75,
+      "dozen": 65,
+      "bundle": 60,
+      "distributor": null
+    },
+    "family": "PERFUME",
+    "brand": "MARLEN LAMUR"
+  },
+  {
+    "id": 13,
+    "code": "876-6",
+    "description": "EST. KIT MON CRITERE MUSE",
+    "quantity": 1,
+    "prices": {
+      "unit": 75,
+      "dozen": 65,
+      "bundle": 60,
+      "distributor": null
+    },
+    "family": "PERFUME",
+    "brand": "MARLEN LAMUR"
+  },
+  {
+    "id": 14,
+    "code": "442-0",
+    "description": "EST. KIT MORTON BLACK",
+    "quantity": 1,
+    "prices": {
+      "unit": 75,
+      "dozen": 65,
+      "bundle": 60,
+      "distributor": null
+    },
+    "family": "PERFUME",
+    "brand": "MARLEN LAMUR"
+  },
+  {
+    "id": 15,
+    "code": "478-0",
+    "description": "EST. KIT MON CRITERE ROSE",
+    "quantity": 1,
+    "prices": {
+      "unit": 75,
+      "dozen": 65,
+      "bundle": 60,
+      "distributor": null
+    },
+    "family": "PERFUME",
+    "brand": "MARLEN LAMUR"
+  },
+  {
+    "id": 16,
+    "code": "451-0",
+    "description": "EST. KIT MORTON 110ML COD 451-0",
+    "quantity": 1,
+    "prices": {
+      "unit": 80,
+      "dozen": 68,
+      "bundle": null,
+      "distributor": 48
+    },
+    "family": "PERFUME",
+    "brand": "MARLEN LAMUR"
+  },
+  {
+    "id": 17,
+    "code": "COD 339-0",
+    "description": "EST. KIT MON CRITERE 105ML COD 339-0",
+    "quantity": 1,
+    "prices": {
+      "unit": 75,
+      "dozen": 65,
+      "bundle": 60,
+      "distributor": null
+    },
+    "family": "PERFUME",
+    "brand": "MARLEN LAMUR"
+  },
+  {
+    "id": 18,
+    "code": "855-0",
+    "description": "EST. KIT ABSOLUTELY",
+    "quantity": 1,
+    "prices": {
+      "unit": 75,
+      "dozen": 65,
+      "bundle": 60,
+      "distributor": null
+    },
+    "family": "PERFUME",
+    "brand": "MARLEN LAMUR"
+  },
+  {
+    "id": 19,
+    "code": "238-0",
+    "description": "EST. DUO FOR YOU ONLY/TABU 110ML",
+    "quantity": 1,
+    "prices": {
+      "unit": 100,
+      "dozen": 85,
+      "bundle": null,
+      "distributor": 80
+    },
+    "family": "PERFUME",
+    "brand": "MARLEN LAMUR"
+  },
+  {
+    "id": 20,
+    "code": "849-0",
+    "description": "EST. DUO LOVE ME/ELIXIR D AMOUR 105ML",
+    "quantity": 1,
+    "prices": {
+      "unit": 100,
+      "dozen": 85,
+      "bundle": null,
+      "distributor": 80
+    },
+    "family": "PERFUME",
+    "brand": "MARLEN LAMUR"
+  },
+  {
+    "id": 21,
+    "code": "86-0",
+    "description": "EST. DUO SENSUAL/GALACTIC LOVE",
+    "quantity": 1,
+    "prices": {
+      "unit": 100,
+      "dozen": 85,
+      "bundle": null,
+      "distributor": 80
+    },
+    "family": "PERFUME",
+    "brand": "MARLEN LAMUR"
+  },
+  {
+    "id": 22,
+    "code": "831-0",
+    "description": "EST. DUO LOVE AND MAGIC/LOVE AND DREAMS 105ML",
+    "quantity": 1,
+    "prices": {
+      "unit": 100,
+      "dozen": 85,
+      "bundle": null,
+      "distributor": 80
+    },
+    "family": "PERFUME",
+    "brand": "MARLEN LAMUR"
+  },
+  {
+    "id": 23,
+    "code": "890-8",
+    "description": "ESTUCHE KIT SUCCESS",
+    "quantity": 1,
+    "prices": {
+      "unit": 65,
+      "dozen": 55,
+      "bundle": 50,
+      "distributor": 50
+    },
+    "family": "PERFUME",
+    "brand": "MARLEN LAMUR"
+  },
+  {
+    "id": 24,
+    "code": "797-0",
+    "description": "EST. KIT MON CRITERE SENSUEL",
+    "quantity": 1,
+    "prices": {
+      "unit": 75,
+      "dozen": 65,
+      "bundle": 60,
+      "distributor": null
+    },
+    "family": "PERFUME",
+    "brand": "MARLEN LAMUR"
+  },
+  {
+    "id": 25,
+    "code": "860-6",
+    "description": "EST. KIT LOVE AND AMOR 105ML",
+    "quantity": 1,
+    "prices": {
+      "unit": 75,
+      "dozen": 65,
+      "bundle": 60,
+      "distributor": null
+    },
+    "family": "PERFUME",
+    "brand": "MARLEN LAMUR"
+  },
+  {
+    "id": 26,
+    "code": "235-3",
+    "description": "EST. DUO LOVE AND AMOR/LOVE AND MAGIC",
+    "quantity": 1,
+    "prices": {
+      "unit": 100,
+      "dozen": 85,
+      "bundle": null,
+      "distributor": 80
+    },
+    "family": "PERFUME",
+    "brand": "MARLEN LAMUR"
+  },
+  {
+    "id": 27,
+    "code": "235-2",
+    "description": "EST. DUO LOVE AND DREAMS/LOVE AND AMOR 105ML",
+    "quantity": 1,
+    "prices": {
+      "unit": 100,
+      "dozen": 85,
+      "bundle": null,
+      "distributor": 80
+    },
+    "family": "PERFUME",
+    "brand": "MARLEN LAMUR"
+  },
+  {
+    "id": 28,
+    "code": "438-0",
+    "description": "O.R. EST. KIT FLORENZZA KIT 2 COD 438-0",
+    "quantity": 1,
+    "prices": {
+      "unit": 80,
+      "dozen": 68,
+      "bundle": 63,
+      "distributor": null
+    },
+    "family": "PERFUME",
+    "brand": "MARLEN LAMUR"
+  },
+  {
+    "id": 29,
+    "code": "452-0",
+    "description": "EST. KIT MORTON MUSK",
+    "quantity": 1,
+    "prices": {
+      "unit": 75,
+      "dozen": 55,
+      "bundle": 55,
+      "distributor": 50
+    },
+    "family": "PERFUME",
+    "brand": "MARLEN LAMUR"
+  },
+  {
+    "id": 30,
+    "code": "642-0",
+    "description": "EST. DUO MON CRITERE/MON CRITERE NO.2  105ML",
+    "quantity": 1,
+    "prices": {
+      "unit": 100,
+      "dozen": 85,
+      "bundle": null,
+      "distributor": 80
+    },
+    "family": "PERFUME",
+    "brand": "MARLEN LAMUR"
+  },
+  {
+    "id": 31,
+    "code": "249-0",
+    "description": "EST. KIT ELIXIR D AMOUR",
+    "quantity": 1,
+    "prices": {
+      "unit": 75,
+      "dozen": 65,
+      "bundle": 60,
+      "distributor": null
+    },
+    "family": "PERFUME",
+    "brand": "MARLEN LAMUR"
+  },
+  {
+    "id": 32,
+    "code": "573-0",
+    "description": "EST. KIT FOR YOU ONLY TABU",
+    "quantity": 1,
+    "prices": {
+      "unit": 75,
+      "dozen": 65,
+      "bundle": 60,
+      "distributor": null
+    },
+    "family": "PERFUME",
+    "brand": "MARLEN LAMUR"
+  },
+  {
+    "id": 33,
+    "code": "7406305019878 COD 1007-8",
+    "description": "EST. KIT MORTON X COD 1007-8",
+    "quantity": 1,
+    "prices": {
+      "unit": 60,
+      "dozen": 50,
+      "bundle": null,
+      "distributor": 48
+    },
+    "family": "PERFUME",
+    "brand": "MARLEN LAMUR"
+  },
+  {
+    "id": 34,
+    "code": "477-0",
+    "description": "EST. KIT LOVE ME",
+    "quantity": 1,
+    "prices": {
+      "unit": 75,
+      "dozen": 65,
+      "bundle": 60,
+      "distributor": null
+    },
+    "family": "PERFUME",
+    "brand": "MARLEN LAMUR"
+  },
+  {
+    "id": 35,
+    "code": "715-0",
+    "description": "O.R. EST. KIT FLEUR D PASSION",
+    "quantity": 1,
+    "prices": {
+      "unit": 75,
+      "dozen": 65,
+      "bundle": 60,
+      "distributor": null
+    },
+    "family": "PERFUME",
+    "brand": "MARLEN LAMUR"
+  },
+  {
+    "id": 36,
+    "code": "888-6",
+    "description": "EST. KIT VALERI WOMAN FRAGANCE 1",
+    "quantity": 1,
+    "prices": {
+      "unit": 75,
+      "dozen": 65,
+      "bundle": null,
+      "distributor": 60
+    },
+    "family": "PERFUME",
+    "brand": "MARLEN LAMUR"
+  },
+  {
+    "id": 37,
+    "code": "55-0",
+    "description": "EST. KIT PINK GLAMOUR",
+    "quantity": 1,
+    "prices": {
+      "unit": 75,
+      "dozen": 65,
+      "bundle": 60,
+      "distributor": null
+    },
+    "family": "PERFUME",
+    "brand": "MARLEN LAMUR"
+  },
+  {
+    "id": 38,
+    "code": "840-0",
+    "description": "EST. DUO MON CRITERE SENSUAL/AMORI",
+    "quantity": 1,
+    "prices": {
+      "unit": 100,
+      "dozen": 85,
+      "bundle": null,
+      "distributor": 80
+    },
+    "family": "PERFUME",
+    "brand": "MARLEN LAMUR"
+  },
+  {
+    "id": 39,
+    "code": "122-0",
+    "description": "O.R. PERFUME FOR YOU ONLY 150ML",
+    "quantity": 1,
+    "prices": {
+      "unit": 75,
+      "dozen": 60,
+      "bundle": 55,
+      "distributor": null
+    },
+    "family": "PERFUME",
+    "brand": "MARLEN LAMUR"
+  },
+  {
+    "id": 40,
+    "code": "885-6",
+    "description": "ESTUCHE SENSUAL AND SEXY 110ML",
+    "quantity": 1,
+    "prices": {
+      "unit": 75,
+      "dozen": 65,
+      "bundle": 60,
+      "distributor": null
+    },
+    "family": "PERFUME",
+    "brand": "MARLEN LAMUR"
+  }
+]
