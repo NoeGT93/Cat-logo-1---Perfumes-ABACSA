@@ -69,10 +69,11 @@ button, a, [role="button"], label.btn { touch-action: manipulation; -webkit-user
 .site-header { position: sticky; top: 0; z-index: 30; padding-top: env(safe-area-inset-top); background: var(--bg); box-shadow: 0 1px 0 var(--line); }
 .header-main { display: flex; align-items: center; gap: 32px; height: var(--header-h); }
 .logo { flex: none; display: flex; align-items: center; gap: 10px; }
-.logo > img { height: 38px; width: auto; }
-.logo-text { display: grid; gap: 3px; }
-.logo-text img { height: 17px; width: auto; }
-.logo-text span { font-size: 8.5px; font-weight: 600; letter-spacing: 0.32em; text-transform: uppercase; color: var(--muted); }
+.logo-full { height: 50px; width: auto; }
+.logo-compact { display: none; align-items: center; gap: 8px; }
+.logo-compact img:first-child { height: 34px; width: auto; }
+.logo-compact img:last-child { height: 15px; width: auto; }
+@media (max-width: 479px) { .logo-full { display: none; } .logo-compact { display: flex; } }
 .header-search {
   flex: 1; max-width: 420px; display: flex; align-items: center; gap: 10px; height: 42px; padding: 0 16px;
   border: 1px solid transparent; border-radius: 999px; background: var(--surface); color: var(--muted);
@@ -114,6 +115,7 @@ button, a, [role="button"], label.btn { touch-action: manipulation; -webkit-user
 .hero-grid { display: grid; grid-template-columns: minmax(0, 1fr); gap: 24px; padding-block: 32px 36px; align-items: center; }
 @media (min-width: 900px) { .hero-grid { grid-template-columns: 1fr 1fr; gap: 48px; padding-block: 56px; } }
 .hero-copy { display: grid; grid-template-columns: minmax(0, 1fr); gap: 14px; justify-items: start; }
+.hero-tagline { font-family: var(--font-head); font-size: 15px; font-weight: 500; color: var(--brand); }
 .hero h1 { font-size: clamp(30px, 4.4vw, 48px); line-height: 1.08; max-width: 16ch; }
 .hero .lead { font-size: clamp(15px, 1.5vw, 18px); color: var(--muted); max-width: 42ch; }
 .hero-row { display: flex; flex-wrap: wrap; align-items: center; gap: 20px 28px; margin-top: 12px; }

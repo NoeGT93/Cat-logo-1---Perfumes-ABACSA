@@ -31,10 +31,11 @@ export default function Header() {
       <header className="site-header">
         <div className="wrap header-main">
           <Link href="/" className="logo" aria-label="ABACSA, inicio">
-            <img src="/brand/mark.png" alt="" width="30" height="36" />
-            <span className="logo-text">
-              <img src="/brand/wordmark.png" alt="ABACSA" width="96" height="18" />
-              <span>Distribuidora</span>
+            {/* Logotipo original completo (bolsa + ABACSA + frase); en móvil solo bolsa + ABACSA */}
+            <img className="logo-full" src="/brand/logo.png" alt="ABACSA — Encuentra lo que necesitas y descubre mucho más." width="183" height="50" />
+            <span className="logo-compact">
+              <img src="/brand/mark.png" alt="" width="30" height="36" />
+              <img src="/brand/wordmark.png" alt="ABACSA" width="86" height="16" />
             </span>
           </Link>
 

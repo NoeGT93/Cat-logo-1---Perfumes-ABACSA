@@ -4,8 +4,8 @@ import { getProducts } from "@/lib/catalog";
 import { CATEGORIES } from "@/lib/config";
 import ProductCard from "@/components/ProductCard";
 
-// Productos cuyas fotos (caja) forman la composición del banner (cambiar aquí).
-const HERO_CODES = ["238-0", "452-0", "235-2"];
+// Productos cuyas fotos principales (perfumes) forman la composición del banner (cambiar aquí).
+const HERO_CODES = ["238-0", "235-2", "642-0"];
 
 export default function Home() {
   const products = getProducts();
@@ -25,7 +25,7 @@ export default function Home() {
       <section className="hero">
         <div className="wrap hero-grid">
           <div className="hero-copy">
-            <p className="eyebrow">Perfumes y kits</p>
+            <p className="hero-tagline">Encuentra lo que necesitas y descubre mucho más.</p>
             <h1>Todo lo que necesitas para surtir tu negocio.</h1>
             <p className="lead">Encuentra variedad, buenos precios y opciones para comprar al detalle o por mayor.</p>
             <div className="hero-row">
