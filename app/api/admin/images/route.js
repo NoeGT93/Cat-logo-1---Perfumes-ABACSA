@@ -20,7 +20,10 @@ function guard(req) {
 const exists = (code) => getProducts().some((p) => p.code === code);
 
 async function state() {
-  const products = getProducts().map(({ code, name, description, category }) => ({ code, name, description, category }));
+  // Orden del Excel: columna "No." (id)
+  const products = getProducts()
+    .map(({ id, code, name, description, category }) => ({ id, code, name, description, category }))
+    .sort((a, b) => a.id - b.id);
   return { mode: storeMode(), previewBase: previewBase(), products, map: await getMap() };
 }
 

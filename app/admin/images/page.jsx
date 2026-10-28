@@ -186,6 +186,7 @@ export default function AdminImages() {
             {shown.map((p) => (
               <li key={p.code}>
                 <button className="admin-row" aria-pressed={p.code === selected} onClick={() => select(p.code)}>
+                  <span className="admin-no" title="No. en el Excel">{p.id}</span>
                   <span className="admin-thumb">{p.mainImage ? <img src={src(p.mainImage)} alt="" loading="lazy" /> : <NoPhoto />}</span>
                   <span className="admin-row-text">
                     <strong>{p.code}</strong>
@@ -205,7 +206,7 @@ export default function AdminImages() {
           ) : (
             <>
               <div>
-                <p className="code">Código {current.code} · {catLabel(current.category)}</p>
+                <p className="code">No. {current.id} · Código {current.code} · {catLabel(current.category)}</p>
                 <h2>{current.name}</h2>
                 <p className="muted desc">{current.description}</p>
               </div>
