@@ -2,7 +2,8 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getProduct, getProducts } from "@/lib/catalog";
 import { CATEGORIES, money, refPrice } from "@/lib/config";
-import ProductDetail, { RelatedList } from "@/components/ProductDetail";
+import ProductDetail from "@/components/ProductDetail";
+import ProductCarousel from "@/components/ProductCarousel";
 
 const Chevron = () => (
   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
@@ -24,9 +25,9 @@ export async function generateMetadata({ params }) {
   return { title, description, openGraph: { title, description, images: p.mainImage ? [p.mainImage] : [] } };
 }
 
-// Relacionados: misma categoría primero, luego el resto; con foto antes que sin foto.
+// Relacionados: con foto primero (misma categoría antes), luego los que aún no tienen foto.
 function related(product, all, n = 4) {
-  const score = (p) => (p.category === product.category ? 2 : 0) + (p.mainImage ? 1 : 0);
+  const score = (p) => (p.mainImage ? 2 : 0) + (p.category === product.category ? 1 : 0);
   return all
     .filter((p) => p.code !== product.code)
     .map((p, i) => ({ p, s: score(p), i }))
@@ -50,14 +51,15 @@ export default async function ProductPage({ params }) {
         <Chevron />
         <span aria-current="page">{product.name}</span>
       </nav>
-      <div className="product-layout">
-        <div className="product-main">
-          <ProductDetail product={product} />
-        </div>
-        <aside className="product-related">
+      <div className="product-main">
+        <ProductDetail product={product} />
+      </div>
+      <div className="product-related">
+        <div className="section-head">
           <h2>Productos relacionados</h2>
-          <RelatedList products={related(product, all)} />
-        </aside>
+          <Link href={cat ? `/catalogo?cat=${cat.key}` : "/catalogo"} className="link">Ver más</Link>
+        </div>
+        <ProductCarousel products={related(product, all, 10)} />
       </div>
     </section>
   );

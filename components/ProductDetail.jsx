@@ -1,11 +1,10 @@
 "use client";
 import { useState } from "react";
-import Link from "next/link";
-import { BUNDLE_QTY, money, priceFor, priceTiers, refPrice } from "@/lib/config";
+import { BUNDLE_QTY, money, priceFor, priceTiers } from "@/lib/config";
 import { CartIcon, useCart } from "./Cart";
 import ProductImage from "./ProductImage";
 import QuantitySelector from "./QuantitySelector";
-import { PlusIcon, categoryLabel } from "./ProductCard";
+import { categoryLabel } from "./ProductCard";
 
 export default function ProductDetail({ product }) {
   const { add, qtyOf } = useCart();
@@ -83,37 +82,5 @@ export default function ProductDetail({ product }) {
         </div>
       </div>
     </div>
-  );
-}
-
-// Lista compacta de relacionados (columna lateral de la ficha).
-export function RelatedList({ products }) {
-  const { add } = useCart();
-  return (
-    <ul className="related-list">
-      {products.map((p) => {
-        const href = `/producto/${encodeURIComponent(p.code)}`;
-        const price = refPrice(p);
-        return (
-          <li key={p.code} className="related-item">
-            <Link href={href} className="related-img">
-              <ProductImage src={p.mainImage} alt={p.name} sizes="72px" />
-            </Link>
-            <div className="related-info">
-              <Link href={href} className="related-name">{p.name}</Link>
-              <p className="code">Código {p.code}</p>
-              {price != null && <p className="related-price">{money(price)} <span className="muted">c/u</span></p>}
-            </div>
-            <button
-              className="related-add"
-              aria-label={`Agregar ${p.name} al pedido`}
-              onClick={(e) => add(p, 1, e.currentTarget.closest(".related-item").querySelector("img") || e.currentTarget)}
-            >
-              <PlusIcon />
-            </button>
-          </li>
-        );
-      })}
-    </ul>
   );
 }

@@ -11,7 +11,7 @@ export default function Home() {
   const products = getProducts();
   const withPhoto = products.filter((p) => p.mainImage);
   // Destacados: primero los que tienen foto, en el orden del Excel.
-  const featured = [...withPhoto, ...products.filter((p) => !p.mainImage)].slice(0, 10);
+  const featured = [...withPhoto, ...products.filter((p) => !p.mainImage)].slice(0, 16);
   const heroPick = [...HERO_CODES.map((c) => withPhoto.find((p) => p.code === c)).filter(Boolean), ...withPhoto];
   const heroPhotos = [...new Set(heroPick)].slice(0, 3);
 

@@ -19,7 +19,12 @@ export default function ProductCard({ product, eager }) {
       <Link href={href} className="card-img">
         <ProductImage src={product.mainImage} alt={product.name} eager={eager} />
         {category && <span className="badge-cat">{category.replace(/s$/, "")}</span>}
-        {qty > 0 && <span className="badge-qty">{qty} en pedido</span>}
+        {qty > 0 && (
+          <span className="badge-qty">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5" /></svg>
+            {qty} en pedido
+          </span>
+        )}
       </Link>
       <div className="card-body">
         {product.brand && <p className="card-brand">{product.brand}</p>}

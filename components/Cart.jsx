@@ -207,7 +207,7 @@ function OrderSummary({ onContinue }) {
 }
 
 function OrderHead({ onClose }) {
-  const { count, clear } = useCart();
+  const { count } = useCart();
   return (
     <header className="order-head">
       <div>
@@ -215,7 +215,9 @@ function OrderHead({ onClose }) {
         <p className="muted">{count === 0 ? "Sin productos" : `${count} ${count === 1 ? "producto" : "productos"}`}</p>
       </div>
       <div className="order-head-actions">
-        {count > 0 && <button className="link-btn" onClick={() => confirm("¿Vaciar el pedido?") && clear()}>Vaciar</button>}
+        {onClose && count > 0 && (
+          <Link href="/pedido" className="order-full" onClick={onClose}>Ver en pantalla completa</Link>
+        )}
         {onClose && (
           <button className="icon-btn" onClick={onClose} aria-label="Cerrar">
             <CloseIcon />
@@ -236,6 +238,16 @@ function OrderEmpty({ onNavigate }) {
   );
 }
 
+// Acción destructiva al final, lejos de las acciones principales.
+function ClearButton() {
+  const { clear } = useCart();
+  return (
+    <button className="link-btn order-clear" onClick={() => confirm("¿Vaciar el pedido?") && clear()}>
+      Vaciar pedido
+    </button>
+  );
+}
+
 // Drawer (se abre desde el ícono del pedido).
 function OrderPanel({ onClose }) {
   const { items } = useCart();
@@ -249,7 +261,7 @@ function OrderPanel({ onClose }) {
           <OrderLines onNavigate={onClose} />
           <div className="order-foot">
             <OrderSummary onContinue={onClose} />
-            <Link href="/pedido" className="link-btn order-full" onClick={onClose}>Ver pedido en pantalla completa</Link>
+            <ClearButton />
           </div>
         </>
       )}
@@ -264,7 +276,7 @@ export function OrderPage() {
     <div className="order-page">
       <section className="order-page-list">
         <OrderHead />
-        {items.length === 0 ? <OrderEmpty /> : <OrderLines />}
+        {items.length === 0 ? <OrderEmpty /> : <><OrderLines /><ClearButton /></>}
       </section>
       {items.length > 0 && (
         <aside className="order-page-summary">
