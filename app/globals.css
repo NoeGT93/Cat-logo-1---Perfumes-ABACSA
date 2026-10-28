@@ -191,7 +191,8 @@ button, a, [role="button"], label.btn {
 }
 .btn:active { transform: scale(0.97); }
 .btn-primary { background: var(--brand); color: #fff; }
-.btn-accent { background: var(--accent); color: #fff; }
+/* Texto oscuro sobre naranja: blanco no alcanza contraste 4.5:1 */
+.btn-accent { background: var(--accent); color: var(--brand-deep); }
 .btn-light { background: #fff; color: var(--brand-deep); }
 .btn-ghost { border-color: rgba(255, 255, 255, 0.35); color: #fff; }
 .btn-secondary { background: var(--bg); border-color: var(--line); color: var(--ink); }
@@ -216,7 +217,8 @@ button, a, [role="button"], label.btn {
   .header-icon-link:hover { background: var(--surface); }
   .link:hover { text-decoration: underline; text-underline-offset: 3px; }
   .btn-primary:hover { background: var(--brand-ink); }
-  .btn-accent:hover { background: var(--accent-ink); }
+  .btn-accent:hover { background: #f59b66; }
+  .btn-hero:hover svg { transform: translateX(3px); }
   .btn-light:hover { background: var(--brand-tint); }
   .btn-ghost:hover { border-color: #fff; }
   .btn-secondary:hover { border-color: var(--ink); }
@@ -231,37 +233,57 @@ button, a, [role="button"], label.btn {
 }
 
 /* Hero */
-.hero { background: var(--brand-deep); color: #fff; overflow: hidden; position: relative; }
-.hero::after {
-  content: "";
-  position: absolute;
-  width: 520px;
-  height: 520px;
-  right: -140px;
-  top: -180px;
-  border-radius: 50%;
-  background: var(--brand);
-  opacity: 0.55;
-  pointer-events: none;
-}
-.hero-grid { position: relative; z-index: 1; display: grid; grid-template-columns: minmax(0, 1fr); gap: 32px; padding-top: 40px; padding-bottom: 88px; align-items: center; }
-@media (min-width: 900px) { .hero-grid { grid-template-columns: 1.05fr 1fr; gap: 48px; padding-top: 64px; padding-bottom: 112px; } }
-.hero-copy { display: grid; grid-template-columns: minmax(0, 1fr); gap: 16px; }
-.hero h1 { font-size: clamp(30px, 5.4vw, 52px); line-height: 1.05; max-width: 16ch; }
-.hero .lead { color: #cfe1e8; font-size: clamp(15px, 2vw, 18px); max-width: 44ch; }
-.search-hero { max-width: 520px; height: 58px; border: 0; margin-top: 8px; }
-.search-hero .btn { min-height: 46px; }
-.hero-actions { display: flex; flex-wrap: wrap; gap: 10px; }
-.hero-photos { display: grid; grid-template-columns: 1.2fr 1fr; grid-template-rows: repeat(2, minmax(0, 1fr)); gap: 12px; aspect-ratio: 5 / 4; }
-.hero-photo { position: relative; border-radius: var(--radius); overflow: hidden; background: var(--photo); }
+.hero { position: relative; overflow: hidden; background: var(--brand-deep); color: #fff; }
+.hero::before,
+.hero::after { content: ""; position: absolute; border-radius: 50%; pointer-events: none; }
+.hero::before { width: 560px; height: 560px; right: -160px; top: -220px; background: var(--brand); opacity: 0.5; }
+.hero::after { width: 220px; height: 220px; left: -90px; bottom: -110px; border: 1px solid rgba(255, 255, 255, 0.08); }
+.hero-grid { position: relative; z-index: 1; display: grid; grid-template-columns: minmax(0, 1fr); gap: 32px; padding-top: 36px; padding-bottom: 88px; align-items: center; }
+@media (min-width: 900px) { .hero-grid { grid-template-columns: 1fr 1.05fr; gap: 56px; padding-top: 64px; padding-bottom: 112px; } }
+.hero-copy { display: grid; grid-template-columns: minmax(0, 1fr); gap: 18px; justify-items: start; }
+.hero h1 { font-size: clamp(32px, 5.2vw, 56px); line-height: 1.04; letter-spacing: -0.03em; max-width: 15ch; }
+.hero-hl { color: var(--accent); }
+.hero .lead { color: #cfe1e8; font-size: clamp(15px, 1.7vw, 18px); max-width: 44ch; }
+.hero-points { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; font-size: 15px; color: #e6f0f3; }
+.hero-points li { display: flex; align-items: center; gap: 10px; }
+.hero-points svg { flex: none; width: 22px; height: 22px; padding: 3px; border-radius: 999px; background: rgba(242, 140, 80, 0.18); color: var(--accent); }
+.search-hero { width: 100%; max-width: 520px; height: 54px; border: 0; }
+@media (min-width: 720px) { .hero .search-hero { display: none; } }
+.hero-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 4px; }
+.btn-hero { min-height: 54px; padding: 0 26px; font-size: 16px; }
+.btn-hero svg { transition: transform 200ms var(--ease-out); }
+
+.hero-media { position: relative; }
+.hero-photos { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+.hero-photo { position: relative; aspect-ratio: 3 / 2; border-radius: var(--radius); overflow: hidden; background: var(--photo); }
 .hero-photo img { object-fit: cover; }
-.hero-photo-0 { grid-row: span 2; }
-.hero-photos:has(> :only-child) { grid-template-columns: 1fr; }
-/* En móvil: tira baja de 3 fotos para que "Así de fácil" quede a la vista. */
+.hero-photo-0 { grid-column: span 2; }
+.hero-photos:has(> :only-child) .hero-photo-0 { grid-column: auto / span 2; }
+.hero-badge {
+  position: absolute;
+  left: 16px;
+  top: 16px;
+  display: grid;
+  padding: 10px 16px;
+  border-radius: var(--radius-sm);
+  background: var(--bg);
+  color: var(--ink);
+  box-shadow: var(--shadow);
+  line-height: 1.25;
+}
+.hero-badge strong { font-family: var(--font-head); font-size: 15px; font-weight: 600; }
+.hero-badge span { font-size: 13px; color: var(--accent-ink); font-weight: 600; }
+/* Móvil: tira compacta de fotos y botones en una fila para que "Así de fácil" quede cerca */
 @media (max-width: 899px) {
-  .hero-grid { gap: 24px; padding-top: 28px; padding-bottom: 76px; }
-  .hero-photos { aspect-ratio: 3 / 1; grid-template-columns: repeat(3, 1fr); grid-template-rows: 1fr; gap: 8px; }
-  .hero-photo-0 { grid-row: auto; }
+  .hero-grid { gap: 24px; padding-bottom: 76px; }
+  .hero-copy { gap: 14px; }
+  .hero-points { font-size: 14px; gap: 6px; }
+  .hero-actions { width: 100%; flex-wrap: nowrap; gap: 8px; }
+  .hero-actions .btn { flex: 1; min-height: 50px; padding: 0 12px; font-size: 14.5px; }
+  .hero-photos { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+  .hero-photo { aspect-ratio: 1; }
+  .hero-photo-0 { grid-column: auto; }
+  .hero-badge { position: static; display: flex; justify-content: space-between; margin-top: 8px; padding: 10px 14px; box-shadow: none; }
 }
 
 /* Así de fácil */
