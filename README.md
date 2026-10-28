@@ -44,6 +44,18 @@ Productos sin foto muestran un placeholder. Después de agregar fotos, hacer com
 
 ## Precios
 
-La tarjeta muestra el precio por unidad y “Desde Q…” (el menor precio por mayor). La ficha muestra cada modalidad (Unidad, Docena, Fardo, Distribuidor) solo si existe. El pedido suma automáticamente con el precio por unidad y lo presenta como **total estimado**; ABACSA confirma por WhatsApp el precio final según cantidad, disponibilidad y envío.
+Escalas por producto (mismo código), en `lib/config.js` (`DOZEN_QTY`, `BUNDLE_QTY`):
+
+| Cantidad | Precio |
+| --- | --- |
+| 1–11 | Unidad |
+| 12–23 | Docena |
+| 24+ | Fardo (si no existe, Distribuidor: son la misma escala) |
+
+El pedido suma automáticamente con la escala que corresponde a cada producto y lo presenta como **total estimado**; ABACSA confirma por WhatsApp. Verificación: `npm test`.
+
+## WhatsApp con foto
+
+WhatsApp no permite adjuntar fotos desde un enlace `wa.me`. Al publicar el sitio, definir `NEXT_PUBLIC_SITE_URL` (ver `.env.example`): el mensaje incluye un enlace por producto y WhatsApp muestra su foto como vista previa.
 
 Las fotos del banner de inicio se eligen en `HERO_CODES` (`app/page.jsx`).

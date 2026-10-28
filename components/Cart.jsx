@@ -1,7 +1,7 @@
 "use client";
 import { createContext, useContext, useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
-import { WHATSAPP_NUMBER, money, refPrice } from "@/lib/config";
+import { SITE_URL, WHATSAPP_NUMBER, money, nextTier, priceFor } from "@/lib/config";
 import ProductImage from "./ProductImage";
 import QuantitySelector from "./QuantitySelector";
 
@@ -51,8 +51,8 @@ export function CartProvider({ products, children }) {
         .filter((i) => byCode.has(i.code))
         .map((i) => {
           const p = byCode.get(i.code);
-          const price = refPrice(p);
-          return { ...i, name: p.name, mainImage: p.mainImage, price, lineTotal: price != null ? price * i.qty : null };
+          const { price, tier, total } = priceFor(p, i.qty);
+          return { ...i, name: p.name, mainImage: p.mainImage, price, tier, lineTotal: total, next: nextTier(p, i.qty) };
         }),
     [saved, byCode]
   );
@@ -164,11 +164,19 @@ function OrderPanel({ onClose }) {
                       <CloseIcon size={16} />
                     </button>
                   </div>
-                  <p className="code">Código {i.code}{i.price != null && ` · ${money(i.price)} c/u`}</p>
+                  <p className="code">
+                    Código {i.code}
+                    {i.price != null && <> · <span className="tier-tag">{i.tier}</span> {money(i.price)} c/u</>}
+                  </p>
                   <div className="line-actions">
                     <QuantitySelector value={i.qty} onChange={(q) => setQty(i.code, q)} min={0} small />
                     <span className="line-total">{i.lineTotal != null ? money(i.lineTotal) : "Consultar"}</span>
                   </div>
+                  {i.next && i.next.need <= 6 && (
+                    <button className="tier-hint" onClick={() => setQty(i.code, i.qty + i.next.need)}>
+                      Agrega {i.next.need} más y paga {money(i.next.price)} c/u ({i.next.label.toLowerCase()})
+                    </button>
+                  )}
                 </div>
               </li>
             ))}
@@ -179,7 +187,7 @@ function OrderPanel({ onClose }) {
               <strong>{money(total)}{missingPrice && "+"}</strong>
             </div>
             <p className="note">
-              Calculado con precio por unidad. Por docena, fardo o distribuidor el precio puede ser menor: ABACSA te confirma el precio final, disponibilidad y envío.
+              Precio por producto: 1–11 u. unidad, 12+ docena, 24+ fardo/distribuidor. ABACSA te confirma el precio final, disponibilidad y envío.
             </p>
             <a className="btn btn-whatsapp" href={whatsappUrl(items, total)} target="_blank" rel="noopener noreferrer">
               <WhatsAppIcon /> Solicitar por WhatsApp
@@ -209,17 +217,25 @@ function MobileOrderBar() {
   );
 }
 
+// Resumen con formato de WhatsApp (*negrita*). WhatsApp no permite adjuntar fotos desde un enlace:
+// con SITE_URL cada producto lleva su enlace, y WhatsApp muestra la foto (og:image) como vista previa.
 export function whatsappMessage(items, total) {
   const count = items.reduce((n, i) => n + i.qty, 0);
   const lines = items
-    .map((i) => `${i.qty} × Código ${i.code}\n${i.name}${i.price != null ? `\nRef. ${money(i.price)} c/u = ${money(i.lineTotal)}` : ""}`)
+    .map((i, n) => {
+      const price = i.price != null ? `${i.qty} u. × ${money(i.price)} (${i.tier.toLowerCase()}) = *${money(i.lineTotal)}*` : `${i.qty} u. · precio a consultar`;
+      const link = SITE_URL ? `\n   📷 ${SITE_URL}/producto/${encodeURIComponent(i.code)}` : "";
+      return `${n + 1}. *${i.name}* — Cód. ${i.code}\n   ${price}${link}`;
+    })
     .join("\n\n");
   return (
-    "Hola ABACSA, deseo solicitar información sobre los siguientes productos:\n\n" +
+    "Hola ABACSA 👋, quiero hacer este pedido:\n\n" +
+    "🛍️ *RESUMEN DEL PEDIDO*\n\n" +
     lines +
-    `\n\nCantidad total: ${count} ${count === 1 ? "producto" : "productos"}` +
-    `\nTotal estimado (precio por unidad): ${money(total)}` +
-    "\n\nPor favor confirmar disponibilidad y precio correspondiente a la cantidad solicitada."
+    "\n\n━━━━━━━━━━\n" +
+    `Productos: *${count}* ${count === 1 ? "unidad" : "unidades"} (${items.length} ${items.length === 1 ? "código" : "códigos"})\n` +
+    `Total estimado: *${money(total)}*\n\n` +
+    "Por favor confirmar disponibilidad, precio final y envío. ¡Gracias!"
   );
 }
 

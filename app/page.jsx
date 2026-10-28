@@ -5,14 +5,16 @@ import { CATEGORIES, WHATSAPP_NUMBER } from "@/lib/config";
 import ProductCard from "@/components/ProductCard";
 import { SearchIcon } from "@/components/Catalog";
 import { WhatsAppIcon } from "@/components/Cart";
+import { AddIcon, BrowseIcon, ConfirmIcon, SendIcon } from "@/components/StepIcons";
 
 // Productos cuyas fotos se muestran en el banner (cambiar aquí).
 const HERO_CODES = ["238-0", "235-2", "642-0"];
 
 const STEPS = [
-  { title: "Elige", text: "Busca tus productos y agrégalos al pedido.", icon: <SearchIcon /> },
-  { title: "Envía", text: "Manda tu pedido por WhatsApp con un toque.", icon: <WhatsAppIcon size={18} /> },
-  { title: "Confirma", text: "ABACSA te confirma precio según cantidad, disponibilidad y envío.", icon: <CheckCircle /> },
+  { title: "Elige", text: "Busca en el catálogo", icon: <BrowseIcon /> },
+  { title: "Agrega", text: "Docena y fardo con mejor precio", icon: <AddIcon /> },
+  { title: "Envía", text: "Tu pedido por WhatsApp", icon: <SendIcon /> },
+  { title: "Confirma", text: "Precio final, disponibilidad y envío", icon: <ConfirmIcon /> },
 ];
 
 export default function Home() {
@@ -70,11 +72,9 @@ export default function Home() {
           <ol>
             {STEPS.map((s, i) => (
               <li key={s.title}>
-                <span className="step-num">{i + 1}</span>
-                <div>
-                  <h3>{s.icon} {s.title}</h3>
-                  <p>{s.text}</p>
-                </div>
+                <span className="step-icon">{s.icon}</span>
+                <h3><span className="step-num">{i + 1}.</span> {s.title}</h3>
+                <p>{s.text}</p>
               </li>
             ))}
           </ol>
@@ -127,11 +127,3 @@ export default function Home() {
   );
 }
 
-function CheckCircle() {
-  return (
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.9" aria-hidden="true">
-      <circle cx="12" cy="12" r="9" />
-      <path d="m8 12.5 2.8 2.8L16 10" />
-    </svg>
-  );
-}

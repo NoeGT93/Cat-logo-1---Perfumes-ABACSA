@@ -1,13 +1,16 @@
 import Link from "next/link";
-import { Plus_Jakarta_Sans } from "next/font/google";
+import { Inter, Poppins } from "next/font/google";
 import { CartProvider, CartButton, OrderShell, WhatsAppIcon } from "@/components/Cart";
 import { getProducts } from "@/lib/catalog";
-import { WHATSAPP_DISPLAY, WHATSAPP_NUMBER } from "@/lib/config";
+import { SITE_URL, WHATSAPP_DISPLAY, WHATSAPP_NUMBER } from "@/lib/config";
 import "./globals.css";
 
-const font = Plus_Jakarta_Sans({ subsets: ["latin"], variable: "--font-sans", display: "swap" });
+// Inter para lectura; Poppins para títulos, precios y botones.
+const sans = Inter({ subsets: ["latin"], variable: "--font-sans", display: "swap" });
+const display = Poppins({ subsets: ["latin"], weight: ["500", "600", "700"], variable: "--font-display", display: "swap" });
 
 export const metadata = {
+  ...(SITE_URL && { metadataBase: new URL(SITE_URL) }),
   title: "Catálogo ABACSA",
   description: "Encuentra lo que necesitas y descubre mucho más. Compra al detalle o por mayor y pide por WhatsApp.",
 };
@@ -24,7 +27,7 @@ export default function RootLayout({ children }) {
   // Solo lo que el pedido necesita para mostrar nombre, foto y precio.
   const products = getProducts().map(({ code, name, mainImage, prices, fromPrice }) => ({ code, name, mainImage, prices, fromPrice }));
   return (
-    <html lang="es" className={font.variable}>
+    <html lang="es" className={`${sans.variable} ${display.variable}`}>
       <body>
         <CartProvider products={products}>
           <div className="topbar">

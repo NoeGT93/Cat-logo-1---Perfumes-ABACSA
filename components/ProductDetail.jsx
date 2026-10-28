@@ -1,16 +1,21 @@
 "use client";
 import { useState } from "react";
-import { PRICE_LABELS, money } from "@/lib/config";
+import { BUNDLE_QTY, money, priceFor, priceTiers } from "@/lib/config";
 import { useCart } from "./Cart";
 import ProductImage from "./ProductImage";
 import QuantitySelector from "./QuantitySelector";
 
 export default function ProductDetail({ product }) {
-  const { add } = useCart();
+  const { add, qtyOf } = useCart();
   const [qty, setQty] = useState(1);
   const images = product.gallery.length ? product.gallery : [product.mainImage].filter(Boolean);
   const [active, setActive] = useState(Math.max(0, images.indexOf(product.mainImage)));
-  const prices = Object.entries(product.prices).filter(([, v]) => v != null);
+  const tiers = priceTiers(product);
+  const inCart = qtyOf(product.code);
+  // La escala se calcula con lo que ya hay en el pedido + lo que se va a agregar.
+  const quote = priceFor(product, inCart + qty);
+  const { bundle, distributor } = product.prices;
+  const extraDistributor = bundle != null && distributor != null && distributor !== bundle;
 
   return (
     <div className="detail">
@@ -22,7 +27,7 @@ export default function ProductDetail({ product }) {
           <div className="thumbs" role="group" aria-label="Fotografías">
             {images.map((src, i) => (
               <button key={src} className="thumb" aria-pressed={i === active} aria-label={`Ver foto ${i + 1}`} onClick={() => setActive(i)}>
-                <ProductImage src={src} alt="" sizes="68px" />
+                <ProductImage src={src} alt="" sizes="72px" />
               </button>
             ))}
           </div>
@@ -38,27 +43,42 @@ export default function ProductDetail({ product }) {
           {product.family && <><dt>Familia</dt><dd>{product.family}</dd></>}
         </dl>
 
-        {prices.length > 0 ? (
+        {tiers.length > 0 ? (
           <table className="prices">
-            <caption>Precios por modalidad</caption>
+            <caption>Precio según cantidad (por producto)</caption>
             <tbody>
-              {prices.map(([k, v]) => (
-                <tr key={k}>
-                  <th scope="row">{PRICE_LABELS[k]}</th>
-                  <td>{money(v)}</td>
+              {tiers.map((t, i) => {
+                const max = tiers[i + 1]?.min - 1;
+                return (
+                  <tr key={t.key} data-active={quote.tier === t.label}>
+                    <th scope="row">
+                      {t.label}
+                      <span className="tier-range">{max ? `${t.min}–${max} u.` : `${t.min}+ u.`}</span>
+                    </th>
+                    <td>{money(t.price)} <span className="muted">c/u</span></td>
+                  </tr>
+                );
+              })}
+              {extraDistributor && (
+                <tr>
+                  <th scope="row">Distribuidor<span className="tier-range">{BUNDLE_QTY}+ u.</span></th>
+                  <td>{money(distributor)} <span className="muted">c/u</span></td>
                 </tr>
-              ))}
+              )}
             </tbody>
           </table>
         ) : (
           <p className="muted">Precio a consultar por WhatsApp.</p>
         )}
-        <p className="note">Los precios pueden variar según cantidad de compra. ABACSA confirmará el precio final por WhatsApp.</p>
+        <p className="note">
+          {inCart > 0 && <>Ya tienes {inCart} en tu pedido. </>}ABACSA confirmará el precio final por WhatsApp.
+        </p>
 
         <div className="buy-bar">
           <QuantitySelector value={qty} onChange={setQty} />
-          <button className="btn btn-primary" onClick={() => add(product, qty)}>
-            Agregar al pedido
+          <button className="btn btn-primary btn-buy" onClick={() => add(product, qty)}>
+            <span>Agregar al pedido</span>
+            {quote.price != null && <span className="btn-sub">{money(quote.price * qty)} · {quote.tier.toLowerCase()}</span>}
           </button>
         </div>
       </div>
