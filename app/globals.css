@@ -206,7 +206,7 @@ button, a, [role="button"], label.btn {
 }
 .hero-grid { position: relative; z-index: 1; display: grid; grid-template-columns: minmax(0, 1fr); gap: 32px; padding-top: 40px; padding-bottom: 88px; align-items: center; }
 @media (min-width: 900px) { .hero-grid { grid-template-columns: 1.05fr 1fr; gap: 48px; padding-top: 64px; padding-bottom: 112px; } }
-.hero-copy { display: grid; gap: 16px; }
+.hero-copy { display: grid; grid-template-columns: minmax(0, 1fr); gap: 16px; }
 .hero h1 { font-size: clamp(30px, 5.4vw, 52px); line-height: 1.05; max-width: 16ch; }
 .hero .lead { color: #cfe1e8; font-size: clamp(15px, 2vw, 18px); max-width: 44ch; }
 .search-hero { max-width: 520px; height: 58px; border: 0; margin-top: 8px; }
