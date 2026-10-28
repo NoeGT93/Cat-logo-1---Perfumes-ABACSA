@@ -1,8 +1,10 @@
 "use client";
 import { useState } from "react";
+import Image from "next/image";
 
-// Muestra la foto o un placeholder limpio si no existe o falla al cargar.
-export default function ProductImage({ src, alt, eager }) {
+// Muestra la foto (redimensionada por Next según `sizes`) o un placeholder si no existe o falla.
+// El contenedor debe tener position: relative y tamaño definido.
+export default function ProductImage({ src, alt, eager, sizes = "(max-width: 720px) 50vw, 25vw" }) {
   const [failed, setFailed] = useState(false);
   if (!src || failed) {
     return (
@@ -16,5 +18,5 @@ export default function ProductImage({ src, alt, eager }) {
       </div>
     );
   }
-  return <img src={src} alt={alt} loading={eager ? "eager" : "lazy"} decoding="async" onError={() => setFailed(true)} />;
+  return <Image src={src} alt={alt} fill sizes={sizes} priority={eager} onError={() => setFailed(true)} />;
 }

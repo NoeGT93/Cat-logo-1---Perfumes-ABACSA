@@ -70,7 +70,7 @@ export default function AdminImages() {
                   setSelected(p.code);
                   if (innerWidth < 880) requestAnimationFrame(() => document.querySelector(".admin-panel")?.scrollIntoView());
                 }}>
-                  <span className="admin-thumb"><ProductImage src={p.mainImage} alt="" /></span>
+                  <span className="admin-thumb"><ProductImage src={p.mainImage} alt="" sizes="44px" /></span>
                   <span className="admin-row-text">
                     <strong>{p.code}</strong>
                     <span>{p.description}</span>
@@ -91,7 +91,7 @@ export default function AdminImages() {
             <>
               <p className="code">{current.code}</p>
               <h2>{current.description}</h2>
-              <div className="admin-main"><ProductImage src={current.mainImage} alt={current.name} /></div>
+              <div className="admin-main"><ProductImage src={current.mainImage} alt={current.name} sizes="360px" /></div>
               <label className={`btn btn-primary upload ${busy ? "is-busy" : ""}`}>
                 + Agregar fotografías
                 <input type="file" accept="image/jpeg,image/png,image/webp,image/avif" multiple hidden disabled={busy}
@@ -101,7 +101,7 @@ export default function AdminImages() {
               <ul className="admin-gallery">
                 {current.gallery.map((url) => (
                   <li key={url} className={url === current.mainImage ? "is-main" : ""}>
-                    <ProductImage src={url} alt="" />
+                    <span className="admin-gallery-img"><ProductImage src={url} alt="" sizes="150px" /></span>
                     <span className="fname" title={url}>{url.split("/").pop()}</span>
                     {url === current.mainImage ? (
                       <span className="badge">Principal</span>

@@ -17,13 +17,13 @@ export default function ProductDetail({ product }) {
     <div className="detail">
       <div className="gallery">
         <div className="gallery-main">
-          <ProductImage key={images[active]} src={images[active]} alt={product.name} eager />
+          <ProductImage key={images[active]} src={images[active]} alt={product.name} eager sizes="(max-width: 880px) 100vw, 640px" />
         </div>
         {images.length > 1 && (
           <div className="thumbs" role="group" aria-label="Fotografías">
             {images.map((src, i) => (
               <button key={src} className="thumb" aria-pressed={i === active} aria-label={`Ver foto ${i + 1}`} onClick={() => setActive(i)}>
-                <ProductImage src={src} alt="" />
+                <ProductImage src={src} alt="" sizes="68px" />
               </button>
             ))}
           </div>

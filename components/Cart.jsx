@@ -128,7 +128,7 @@ function CartDrawer() {
               {items.map((i) => (
                 <li key={i.code} className="line">
                   <Link href={`/producto/${encodeURIComponent(i.code)}`} className="line-img" onClick={() => setOpen(false)}>
-                    <ProductImage src={i.mainImage} alt={i.name} />
+                    <ProductImage src={i.mainImage} alt={i.name} sizes="72px" />
                   </Link>
                   <div className="line-info">
                     <p className="line-name">{i.name}</p>
