@@ -2,7 +2,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { getProducts } from "@/lib/catalog";
 import { CATEGORIES } from "@/lib/config";
-import ProductCarousel from "@/components/ProductCarousel";
+import ProductCard from "@/components/ProductCard";
 
 // Productos cuyas fotos (caja) forman la composición del banner (cambiar aquí).
 const HERO_CODES = ["238-0", "452-0", "235-2"];
@@ -10,8 +10,8 @@ const HERO_CODES = ["238-0", "452-0", "235-2"];
 export default function Home() {
   const products = getProducts();
   const withPhoto = products.filter((p) => p.mainImage);
-  // Destacados: todo el catálogo, primero los que tienen foto (en el orden del Excel).
-  const featured = [...withPhoto, ...products.filter((p) => !p.mainImage)];
+  // Destacados: 12 productos (3 filas en escritorio), primero los que tienen foto, en el orden del Excel.
+  const featured = [...withPhoto, ...products.filter((p) => !p.mainImage)].slice(0, 12);
   const heroPick = [...HERO_CODES.map((c) => withPhoto.find((p) => p.code === c)).filter(Boolean), ...withPhoto];
   const heroPhotos = [...new Set(heroPick)].slice(0, 3);
 
@@ -56,7 +56,12 @@ export default function Home() {
           <h2>Productos destacados</h2>
           <Link href="/catalogo" className="link">Ver catálogo <ArrowIcon /></Link>
         </div>
-        <ProductCarousel products={featured} />
+        <div className="grid grid-featured">
+          {featured.map((p, i) => <ProductCard key={p.code} product={p} eager={i < 4} />)}
+        </div>
+        <div className="section-foot">
+          <Link href="/catalogo" className="btn btn-secondary">Ver los {products.length} productos <ArrowIcon /></Link>
+        </div>
       </section>
 
       <section className="wrap section" id="categorias">

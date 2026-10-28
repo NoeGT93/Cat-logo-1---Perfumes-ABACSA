@@ -141,6 +141,11 @@ button, a, [role="button"], label.btn { touch-action: manipulation; -webkit-user
 .section-head { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 18px; }
 .section-head h2 { font-size: clamp(20px, 2.4vw, 24px); }
 
+/* Destacados: 4 columnas x 3 filas en escritorio, 3 en tablet, 2 en móvil */
+@media (min-width: 720px) { .grid.grid-featured { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+@media (min-width: 1000px) { .grid.grid-featured { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+.section-foot { display: flex; justify-content: center; margin-top: 24px; }
+
 /* Carrusel */
 .carousel { position: relative; }
 .carousel-track {
