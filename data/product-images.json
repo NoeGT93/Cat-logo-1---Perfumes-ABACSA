@@ -58,5 +58,13 @@
       "/images/products/122-0/122-0_FOR-YOU-ONLY-150ML_PRODUCTO.jpg",
       "/images/products/122-0/122-0_FOR-YOU-ONLY-150ML_CAJA.jpg"
     ]
+  },
+  "595-0": {
+    "mainImage": "/images/products/595-0/595-0_3_.jpg",
+    "gallery": [
+      "/images/products/595-0/595-0_4_.jpg",
+      "/images/products/595-0/595-0_2_.jpg",
+      "/images/products/595-0/595-0_3_.jpg"
+    ]
   }
 }
