@@ -44,21 +44,6 @@ export default function Catalog({ products, initialQuery = "", initialCategory =
             aria-label="Buscar productos"
           />
         </label>
-        <div className="chips" role="group" aria-label="Filtrar por tipo">
-          {[{ key: "", label: "Todos" }, ...CATEGORIES].map((c) => (
-            <button
-              key={c.key || "all"}
-              className="chip"
-              aria-pressed={cat === c.key}
-              onClick={() => {
-                setCat(c.key);
-                sync(q, c.key);
-              }}
-            >
-              {c.label}
-            </button>
-          ))}
-        </div>
       </div>
 
       <p className="result-count muted" aria-live="polite">

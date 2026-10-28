@@ -7,7 +7,6 @@ import QuantitySelector from "./QuantitySelector";
 
 const CartContext = createContext(null);
 const KEY = "abacsa-cart-v1";
-const DESKTOP = "(min-width: 1100px)";
 export const useCart = () => useContext(CartContext);
 
 // Se guarda solo { code, qty }; nombre, foto y precio salen siempre del catálogo actual.
@@ -66,7 +65,9 @@ export function CartProvider({ products, children }) {
     toastTimer.current = setTimeout(() => setToast(null), 2200);
   };
 
-  const add = (product, qty = 1) => {
+  // source: imagen (o botón) desde donde sale la animación hacia el carrito.
+  const add = (product, qty = 1, source) => {
+    flyToCart(source);
     setSaved((list) =>
       list.some((i) => i.code === product.code)
         ? list.map((i) => (i.code === product.code ? { ...i, qty: i.qty + qty } : i))
@@ -80,11 +81,7 @@ export function CartProvider({ products, children }) {
   const clear = () => setSaved([]);
   const qtyOf = (code) => saved.find((i) => i.code === code)?.qty ?? 0;
 
-  // En escritorio el pedido ya está visible en el panel lateral: no abrir el drawer encima.
-  const show = () => {
-    if (count > 0 && matchMedia(DESKTOP).matches) document.getElementById("order-panel")?.focus();
-    else setOpen(true);
-  };
+  const show = () => setOpen(true);
 
   const value = { items, count, total, missingPrice, add, setQty, remove, clear, qtyOf, open, setOpen, show };
   return (
@@ -96,7 +93,6 @@ export function CartProvider({ products, children }) {
           <OrderPanel onClose={() => setOpen(false)} />
         </aside>
       </div>
-      <MobileOrderBar />
       <div className="toast-region" aria-live="polite">
         {toast && (
           <div key={toast.id} className="toast">
@@ -110,18 +106,42 @@ export function CartProvider({ products, children }) {
   );
 }
 
-// Envuelve el contenido: en escritorio, con productos en el pedido, aparece el panel fijo a la derecha.
-export function OrderShell({ children }) {
-  const { count } = useCart();
-  return (
-    <div className="shell" data-has-items={count > 0}>
-      <main>{children}</main>
-      {count > 0 && (
-        <aside className="side-panel" id="order-panel" tabIndex={-1} aria-label="Tu pedido">
-          <OrderPanel />
-        </aside>
-      )}
-    </div>
+// El producto "vuela" hasta el ícono del pedido y el ícono rebota al recibirlo.
+// Solo transform/opacity con WAAPI; sin desplazamiento si el usuario prefiere menos movimiento.
+function flyToCart(source) {
+  const target = document.getElementById("cart-icon");
+  if (!target) return;
+  const bump = () =>
+    target.animate([{ transform: "scale(1)" }, { transform: "scale(1.25)" }, { transform: "scale(1)" }], {
+      duration: 320,
+      easing: "cubic-bezier(0.23, 1, 0.32, 1)",
+    });
+  const s = source?.getBoundingClientRect();
+  if (!s?.width || matchMedia("(prefers-reduced-motion: reduce)").matches) return bump();
+
+  const isImg = source.tagName === "IMG";
+  const size = isImg ? Math.min(s.width, s.height, 140) : 18;
+  const el = isImg ? source.cloneNode() : document.createElement("div");
+  el.className = "fly-item";
+  el.style.cssText = `left:${s.left + s.width / 2 - size / 2}px;top:${s.top + s.height / 2 - size / 2}px;width:${size}px;height:${size}px;`;
+  document.body.appendChild(el);
+
+  const t = target.getBoundingClientRect();
+  const dx = t.left + t.width / 2 - (s.left + s.width / 2);
+  const dy = t.top + t.height / 2 - (s.top + s.height / 2);
+  el.animate(
+    [
+      { transform: "translate(0, 0) scale(1)", opacity: 1 },
+      { transform: `translate(${dx * 0.5}px, ${dy * 0.5 - 40}px) scale(0.6)`, opacity: 1, offset: 0.55 },
+      { transform: `translate(${dx}px, ${dy}px) scale(${12 / size})`, opacity: 0.4 },
+    ],
+    { duration: 600, easing: "cubic-bezier(0.65, 0, 0.35, 1)" }
+  ).finished.then(
+    () => {
+      el.remove();
+      bump();
+    },
+    () => el.remove()
   );
 }
 
@@ -203,20 +223,6 @@ function OrderPanel({ onClose }) {
   );
 }
 
-function MobileOrderBar() {
-  const { count, total, missingPrice, setOpen } = useCart();
-  if (!count) return null;
-  return (
-    <div className="order-bar">
-      <button className="order-bar-btn" onClick={() => setOpen(true)}>
-        <span className="order-bar-count">{count > 99 ? "99+" : count}</span>
-        <span>Ver pedido</span>
-        <strong>{money(total)}{missingPrice && "+"}</strong>
-      </button>
-    </div>
-  );
-}
-
 // Resumen con formato de WhatsApp (*negrita*). WhatsApp no permite adjuntar fotos desde un enlace:
 // con SITE_URL cada producto lleva su enlace, y WhatsApp muestra la foto (og:image) como vista previa.
 export function whatsappMessage(items, total) {
@@ -246,9 +252,14 @@ export function CartButton() {
   const { count, total, show } = useCart();
   return (
     <button className="cart-btn" onClick={show} aria-label={`Ver pedido, ${count} productos`}>
-      <BagIcon />
-      <span className="cart-label">{count > 0 ? money(total) : "Pedido"}</span>
-      {count > 0 && <span key={count} className="cart-count">{count > 99 ? "99+" : count}</span>}
+      <span className="cart-icon" id="cart-icon">
+        <BagIcon size={22} />
+        {count > 0 && <span className="cart-count">{count > 99 ? "99+" : count}</span>}
+      </span>
+      <span className="cart-text">
+        <span>Mi pedido</span>
+        <strong>{count > 0 ? money(total) : "Vacío"}</strong>
+      </span>
     </button>
   );
 }

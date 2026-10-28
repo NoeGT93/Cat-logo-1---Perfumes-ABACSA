@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Inter, Poppins } from "next/font/google";
-import { CartProvider, CartButton, OrderShell, WhatsAppIcon } from "@/components/Cart";
+import { CartProvider } from "@/components/Cart";
+import Header from "@/components/Header";
 import { getProducts } from "@/lib/catalog";
 import { SITE_URL, WHATSAPP_DISPLAY, WHATSAPP_NUMBER } from "@/lib/config";
 import "./globals.css";
@@ -32,26 +33,15 @@ export default function RootLayout({ children }) {
         <CartProvider products={products}>
           <div className="topbar">
             <div className="wrap topbar-row">
-              <span>Al detalle y por mayor · Quetzaltenango</span>
-              <a href={`https://wa.me/${WHATSAPP_NUMBER}`} target="_blank" rel="noopener noreferrer">
-                <WhatsAppIcon size={14} /> {WHATSAPP_DISPLAY}
-              </a>
+              <span>Compra al detalle o por mayor</span>
+              <span className="topbar-sep" aria-hidden="true">·</span>
+              <span>Precio especial por docena y fardo</span>
+              <span className="topbar-sep topbar-hide-sm" aria-hidden="true">·</span>
+              <span className="topbar-hide-sm">Quetzaltenango, Guatemala</span>
             </div>
           </div>
-          <header className="site-header">
-            <div className="wrap header-row">
-              <Link href="/" className="logo" aria-label="ABACSA, inicio">
-                <img src="/brand/mark.png" alt="" width="28" height="34" />
-                <img src="/brand/wordmark.png" alt="ABACSA" width="80" height="15" />
-              </Link>
-              <nav className="nav">
-                <Link href="/">Inicio</Link>
-                <Link href="/catalogo">Catálogo</Link>
-              </nav>
-              <CartButton />
-            </div>
-          </header>
-          <OrderShell>{children}</OrderShell>
+          <Header />
+          <main className="main">{children}</main>
           <footer className="site-footer">
             <div className="wrap footer-grid">
               <div>

@@ -76,7 +76,7 @@ export default function ProductDetail({ product }) {
 
         <div className="buy-bar">
           <QuantitySelector value={qty} onChange={setQty} />
-          <button className="btn btn-primary btn-buy" onClick={() => add(product, qty)}>
+          <button className="btn btn-primary btn-buy" onClick={(e) => add(product, qty, document.querySelector(".gallery-main img") || e.currentTarget)}>
             <span>Agregar al pedido</span>
             {quote.price != null && <span className="btn-sub">{money(quote.price * qty)} · {quote.tier.toLowerCase()}</span>}
           </button>

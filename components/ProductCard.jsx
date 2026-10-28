@@ -38,7 +38,7 @@ export default function ProductCard({ product, eager }) {
           {qty > 0 ? (
             <QuantitySelector value={qty} onChange={(q) => setQty(product.code, q)} min={0} small block />
           ) : (
-            <button className="btn btn-add" onClick={() => add(product)} aria-label={`Agregar ${product.name} al pedido`}>
+            <button className="btn btn-add" onClick={(e) => add(product, 1, e.currentTarget.closest(".card").querySelector(".card-img img") || e.currentTarget)} aria-label={`Agregar ${product.name} al pedido`}>
               <PlusIcon /> Agregar
             </button>
           )}
