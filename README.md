@@ -1,5 +1,7 @@
 # Catálogo ABACSA
 
+Sitio publicado: https://cat-logo-1-perfumes-abacsa.vercel.app
+
 Catálogo digital comercial: Facebook / Instagram → catálogo → pedido → WhatsApp (+502 4031-7724).
 Sin pagos, login ni registro. Next.js 15, sin otras dependencias de UI.
 
@@ -56,6 +58,6 @@ El pedido suma automáticamente con la escala que corresponde a cada producto y 
 
 ## WhatsApp con foto
 
-WhatsApp no permite adjuntar fotos desde un enlace `wa.me`. Al publicar el sitio, definir `NEXT_PUBLIC_SITE_URL` (ver `.env.example`): el mensaje incluye un enlace por producto y WhatsApp muestra su foto como vista previa.
+WhatsApp no permite adjuntar fotos desde un enlace `wa.me`. El mensaje incluye un enlace por producto y WhatsApp muestra su foto como vista previa.
 
 Las fotos del banner de inicio se eligen en `HERO_CODES` (`app/page.jsx`).
