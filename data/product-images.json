@@ -263,5 +263,12 @@
       "/images/products/7406305019878_COD_1007-8/1007-8_2_.jpg",
       "/images/products/7406305019878_COD_1007-8/1007-8_3_.jpg"
     ]
+  },
+  "477-0": {
+    "mainImage": "/images/products/477-0/477-0_2_.jpg",
+    "gallery": [
+      "/images/products/477-0/477-0_1_.jpg",
+      "/images/products/477-0/477-0_2_.jpg"
+    ]
   }
 }
