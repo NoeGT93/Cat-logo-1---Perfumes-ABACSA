@@ -143,5 +143,13 @@
       "/images/products/612-0/612_3_.jpg",
       "/images/products/612-0/612_1_.jpg"
     ]
+  },
+  "58-0": {
+    "mainImage": "/images/products/58-0/58_3_.jpg",
+    "gallery": [
+      "/images/products/58-0/58_2_.jpg",
+      "/images/products/58-0/58_3_.jpg",
+      "/images/products/58-0/58_1_.jpg"
+    ]
   }
 }
