@@ -127,5 +127,13 @@
       "/images/products/164-0/164-0_3_.jpg",
       "/images/products/164-0/164-0_1_.jpg"
     ]
+  },
+  "619-0": {
+    "mainImage": "/images/products/619-0/619_2_.jpg",
+    "gallery": [
+      "/images/products/619-0/619_2_.jpg",
+      "/images/products/619-0/619_3_.jpg",
+      "/images/products/619-0/619_1_.jpg"
+    ]
   }
 }
