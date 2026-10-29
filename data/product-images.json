@@ -175,5 +175,13 @@
       "/images/products/478-0/DSC_5821.JPG_47aa8467.jpg",
       "/images/products/478-0/DSC_5820.JPG_ec446690.jpg"
     ]
+  },
+  "451-0": {
+    "mainImage": "/images/products/451-0/451_3_.jpg",
+    "gallery": [
+      "/images/products/451-0/451_1_.jpg",
+      "/images/products/451-0/451_2_.jpg",
+      "/images/products/451-0/451_3_.jpg"
+    ]
   }
 }
