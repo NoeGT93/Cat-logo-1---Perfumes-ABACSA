@@ -167,5 +167,13 @@
       "/images/products/442-0/442_2_.jpg",
       "/images/products/442-0/442_3_.jpg"
     ]
+  },
+  "478-0": {
+    "mainImage": "/images/products/478-0/DSC_5820.JPG_ec446690.jpg",
+    "gallery": [
+      "/images/products/478-0/DSC_5819.JPG_5e3ec386.jpg",
+      "/images/products/478-0/DSC_5821.JPG_47aa8467.jpg",
+      "/images/products/478-0/DSC_5820.JPG_ec446690.jpg"
+    ]
   }
 }
