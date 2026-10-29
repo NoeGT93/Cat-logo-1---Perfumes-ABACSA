@@ -54,8 +54,8 @@ npm test
 
 | Cantidad (mismo código) | Precio |
 | --- | --- |
-| 1–11 | Unidad |
-| 12–23 | Docena |
+| 1–3 | Unidad |
+| 4–23 | Por mayor (columna Docena del Excel) |
 | 24+ | Fardo (si no existe, Distribuidor) |
 
 El pedido suma con la escala de cada producto y lo presenta como **total estimado**; ABACSA confirma por WhatsApp.

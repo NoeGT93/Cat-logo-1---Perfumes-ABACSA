@@ -246,27 +246,32 @@ button, a, [role="button"], label.btn { touch-action: manipulation; -webkit-user
   .gallery { flex-direction: column-reverse; }
   .thumbs { flex-direction: row; overflow-x: auto; scrollbar-width: none; }
 }
-.info { display: grid; gap: 8px; align-content: start; min-width: 0; }
+.info { display: grid; grid-template-columns: minmax(0, 1fr); gap: 8px; align-content: start; min-width: 0; }
 .info h1 { font-size: clamp(24px, 3vw, 32px); overflow-wrap: anywhere; }
 .desc { font-size: 12.5px; overflow-wrap: anywhere; }
-.prices { width: 100%; margin-top: 8px; border-collapse: collapse; font-size: 14.5px; }
-.prices th, .prices td { padding: 11px 4px; border-bottom: 1px solid var(--line); }
-.prices th { text-align: left; font-weight: 500; color: var(--ink); }
-.prices td { text-align: right; font-family: var(--font-head); font-weight: 600; color: var(--navy); font-variant-numeric: tabular-nums; }
-.prices tr { transition: background-color 150ms ease; }
-.prices tr[data-active="true"] { background: var(--brand-tint); }
-.prices tr[data-active="true"] th { font-weight: 600; }
+.savings { display: grid; gap: 2px; width: 100%; min-width: 0; overflow-wrap: anywhere; margin-top: 8px; padding: 12px 14px; border: 1px dashed #f3b48c; border-radius: var(--radius-sm); background: #fff4ec; color: var(--accent-ink); text-align: left; font-size: 13px; transition: transform 140ms var(--ease-out); }
+.savings strong { font-family: var(--font-head); font-size: 15px; font-weight: 600; }
+.savings:active { transform: scale(0.98); }
+.tiers { display: grid; margin-top: 8px; border-top: 1px solid var(--line); }
+.tier { display: flex; width: 100%; align-items: center; justify-content: space-between; gap: 12px; min-height: 52px; padding: 10px 12px; border: 0; border-bottom: 1px solid var(--line); background: none; text-align: left; font-size: 15px; transition: background-color 150ms ease; }
+.tier[aria-checked="true"] { background: var(--brand-tint); box-shadow: inset 3px 0 0 var(--navy); }
+.tier[aria-checked="true"] .tier-name { font-weight: 600; }
+.tier-static { cursor: default; }
+.tier-price { font-family: var(--font-head); font-weight: 600; color: var(--navy); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.tier-price .muted { font-family: var(--font); font-weight: 400; font-size: 12px; }
 .tier-range { margin-left: 6px; font-size: 12px; color: var(--muted); font-weight: 400; }
 .buy-bar { display: grid; gap: 12px; margin-top: 12px; justify-items: start; }
 .btn-buy { width: 100%; min-height: 54px; border-radius: var(--radius-sm); font-size: 16px; }
 .btn-sub { font-size: 13px; font-weight: 500; opacity: 0.8; }
 @media (max-width: 879px) {
   .buy-bar {
-    position: sticky; bottom: 0; z-index: 5; grid-template-columns: auto 1fr; align-items: center;
+    position: sticky; bottom: 0; z-index: 5; grid-template-columns: auto minmax(0, 1fr); align-items: center;
     margin-inline: -20px; padding: 12px 20px calc(12px + env(safe-area-inset-bottom));
     background: var(--bg); border-top: 1px solid var(--line);
   }
-  .btn-buy .btn-sub { display: none; }
+  .btn-buy { flex-wrap: wrap; row-gap: 0; column-gap: 6px; white-space: normal; line-height: 1.2; padding: 6px 12px; font-size: 15px; }
+  .btn-buy .btn-sub { flex-basis: 100%; text-align: center; }
+  .btn-buy svg { display: none; }
 }
 
 
@@ -359,6 +364,7 @@ button, a, [role="button"], label.btn { touch-action: manipulation; -webkit-user
   .btn-add:hover { background: var(--navy); color: #fff; }
   .btn-hero:hover svg { transform: translateX(3px); }
   .link-btn:hover, .header-links a:hover { color: var(--navy); }
+  button.tier:hover { background: var(--surface); }
   .card:hover { border-color: #cfd6e0; box-shadow: var(--shadow); }
   .card-name:hover { color: var(--brand); }
   .cat-tile:hover { background: var(--brand-tint); }
@@ -424,3 +430,8 @@ button, a, [role="button"], label.btn { touch-action: manipulation; -webkit-user
   .admin-row:hover { background: var(--surface); }
   .dropzone:hover { border-color: var(--brand); background: var(--brand-tint); }
 }
+
+/* Pedido compartido por WhatsApp */
+.shared-title { font-size: 20px; }
+.shared-line { align-items: center; }
+.shared-img { width: 80px; height: 80px; }

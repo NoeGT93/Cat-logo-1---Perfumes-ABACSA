@@ -18,6 +18,10 @@ export default function ProductDetail({ product }) {
   const { bundle, distributor } = product.prices;
   const extraDistributor = bundle != null && distributor != null && distributor !== bundle;
   const category = categoryLabel(product.category);
+  // Primera escala más barata que la unidad: para el aviso de ahorro
+  const better = tiers.find((t) => tiers[0] && t.price < tiers[0].price);
+  // Tocar una escala ajusta la cantidad al mínimo de esa escala (descontando lo que ya está en el pedido)
+  const pickTier = (t) => setQty(Math.max(1, t.min - inCart));
 
   return (
     <div className="detail">
@@ -43,28 +47,34 @@ export default function ProductDetail({ product }) {
         {category && <span className="pill">{category.replace(/s$/, "")}</span>}
         <p className="muted desc">{product.description}</p>
 
+        {better && quote.price !== better.price && quote.tier !== "Fardo" && quote.tier !== "Distribuidor" && (
+          <button className="savings" onClick={() => pickTier(better)}>
+            <strong>Desde {better.min} unidades pagas {money(better.price)} c/u</strong>
+            <span>Ahorras {money(tiers[0].price - better.price)} por unidad · Toca para elegir</span>
+          </button>
+        )}
+
         {tiers.length > 0 ? (
-          <table className="prices">
-            <tbody>
-              {tiers.map((t, i) => {
-                const max = tiers[i + 1]?.min - 1;
-                return (
-                  <tr key={t.key} data-active={quote.tier === t.label}>
-                    <th scope="row">
-                      {t.label} <span className="tier-range">{max ? `${t.min}–${max} u.` : `${t.min}+ u.`}</span>
-                    </th>
-                    <td>{money(t.price)}</td>
-                  </tr>
-                );
-              })}
-              {extraDistributor && (
-                <tr>
-                  <th scope="row">Distribuidor <span className="tier-range">{BUNDLE_QTY}+ u.</span></th>
-                  <td>{money(distributor)}</td>
-                </tr>
-              )}
-            </tbody>
-          </table>
+          <div className="tiers" role="radiogroup" aria-label="Precio según cantidad">
+            {tiers.map((t, i) => {
+              const max = tiers[i + 1]?.min - 1;
+              const active = quote.tier === t.label;
+              return (
+                <button key={t.key} className="tier" role="radio" aria-checked={active} onClick={() => pickTier(t)}>
+                  <span className="tier-name">
+                    {t.label} <span className="tier-range">{max ? `${t.min}–${max} u.` : `${t.min}+ u.`}</span>
+                  </span>
+                  <span className="tier-price">{money(t.price)} <span className="muted">c/u</span></span>
+                </button>
+              );
+            })}
+            {extraDistributor && (
+              <div className="tier tier-static">
+                <span className="tier-name">Distribuidor <span className="tier-range">{BUNDLE_QTY}+ u.</span></span>
+                <span className="tier-price">{money(distributor)} <span className="muted">c/u</span></span>
+              </div>
+            )}
+          </div>
         ) : (
           <p className="muted">Precio a consultar por WhatsApp.</p>
         )}
@@ -77,7 +87,7 @@ export default function ProductDetail({ product }) {
           <button className="btn btn-primary btn-buy" onClick={(e) => add(product, qty, document.querySelector(".gallery-main img") || e.currentTarget)}>
             <CartIcon size={20} />
             <span>Agregar al pedido</span>
-            {quote.price != null && <span className="btn-sub">{money(quote.price * qty)}</span>}
+            {quote.price != null && <span className="btn-sub">{qty} u. · {money(quote.price * qty)}</span>}
           </button>
         </div>
       </div>

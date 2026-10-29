@@ -1,7 +1,9 @@
 "use client";
 import { createContext, useContext, useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { SITE_URL, WHATSAPP_NUMBER, money, nextTier, priceFor } from "@/lib/config";
+import { encodeOrder } from "@/lib/order-link";
 import ProductImage from "./ProductImage";
 import QuantitySelector from "./QuantitySelector";
 
@@ -81,7 +83,9 @@ export function CartProvider({ products, children }) {
   const clear = () => setSaved([]);
   const qtyOf = (code) => saved.find((i) => i.code === code)?.qty ?? 0;
 
-  const show = () => setOpen(true);
+  // En el celular el pedido se abre en pantalla completa (/pedido); en computadora, el panel lateral.
+  const router = useRouter();
+  const show = () => (matchMedia("(max-width: 899px)").matches ? router.push("/pedido") : setOpen(true));
 
   const value = { items, count, total, missingPrice, add, setQty, remove, clear, qtyOf, open, setOpen, show };
   return (
@@ -192,7 +196,7 @@ function OrderSummary({ onContinue }) {
       <div className="summary-row summary-total"><span>Total estimado</span><strong>{money(total)}{missingPrice && "+"}</strong></div>
       <p className="summary-note">
         <InfoIcon />
-        <span>Los precios pueden variar según cantidad de compra (12+ docena, 24+ fardo). Te confirmaremos disponibilidad y precio final por WhatsApp.</span>
+        <span>Los precios pueden variar según cantidad de compra (4+ por mayor, 24+ fardo). Te confirmaremos disponibilidad y precio final por WhatsApp.</span>
       </p>
       <a className="btn btn-whatsapp" href={whatsappUrl(items, total)} target="_blank" rel="noopener noreferrer">
         <WhatsAppIcon /> Solicitar por WhatsApp
@@ -287,25 +291,26 @@ export function OrderPage() {
   );
 }
 
-// Resumen con formato de WhatsApp (*negrita*). WhatsApp no permite adjuntar fotos desde un enlace:
-// con SITE_URL cada producto lleva su enlace, y WhatsApp muestra la foto (og:image) como vista previa.
+// Resumen con formato de WhatsApp (*negrita*), sin emojis (algunos teléfonos los muestran como "�").
+// WhatsApp no adjunta fotos desde un enlace ni muestra más de una vista previa: por eso va un solo
+// enlace al pedido completo con fotos (/pedido/ver), cuya vista previa es la foto del primer producto.
 export function whatsappMessage(items, total) {
   const count = items.reduce((n, i) => n + i.qty, 0);
   const lines = items
     .map((i, n) => {
-      const price = i.price != null ? `${i.qty} u. × ${money(i.price)} (${i.tier.toLowerCase()}) = *${money(i.lineTotal)}*` : `${i.qty} u. · precio a consultar`;
-      const link = SITE_URL ? `\n   📷 ${SITE_URL}/producto/${encodeURIComponent(i.code)}` : "";
-      return `${n + 1}. *${i.name}* — Cód. ${i.code}\n   ${price}${link}`;
+      const price = i.price != null ? `${i.qty} u. x ${money(i.price)} (${i.tier.toLowerCase()}) = *${money(i.lineTotal)}*` : `${i.qty} u. - precio a consultar`;
+      return `${n + 1}. *${i.name}* (Cód. ${i.code})\n    ${price}`;
     })
     .join("\n\n");
   return (
-    "Hola ABACSA 👋, quiero hacer este pedido:\n\n" +
-    "🛍️ *RESUMEN DEL PEDIDO*\n\n" +
+    "Hola ABACSA, quiero hacer este pedido:\n\n" +
+    "*RESUMEN DEL PEDIDO*\n\n" +
     lines +
-    "\n\n━━━━━━━━━━\n" +
+    "\n\n------------------------------\n" +
     `Productos: *${count}* ${count === 1 ? "unidad" : "unidades"} (${items.length} ${items.length === 1 ? "código" : "códigos"})\n` +
     `Total estimado: *${money(total)}*\n\n` +
-    "Por favor confirmar disponibilidad, precio final y envío. ¡Gracias!"
+    (SITE_URL ? `Ver pedido con fotos:\n${SITE_URL}/pedido/ver?p=${encodeOrder(items)}\n\n` : "") +
+    "Por favor confirmar disponibilidad, precio final y envío. Gracias."
   );
 }
 
