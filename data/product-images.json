@@ -119,5 +119,13 @@
       "/images/products/882-9/882-9_2_.jpg",
       "/images/products/882-9/882-9_1_.jpg"
     ]
+  },
+  "164-0": {
+    "mainImage": "/images/products/164-0/164-0_2_.jpg",
+    "gallery": [
+      "/images/products/164-0/164-0_2_.jpg",
+      "/images/products/164-0/164-0_3_.jpg",
+      "/images/products/164-0/164-0_1_.jpg"
+    ]
   }
 }
