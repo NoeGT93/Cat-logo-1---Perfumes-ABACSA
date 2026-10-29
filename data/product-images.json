@@ -151,5 +151,13 @@
       "/images/products/58-0/58_3_.jpg",
       "/images/products/58-0/58_1_.jpg"
     ]
+  },
+  "876-6": {
+    "mainImage": "/images/products/876-6/876_3_.jpg",
+    "gallery": [
+      "/images/products/876-6/876_2_.jpg",
+      "/images/products/876-6/876_3_.jpg",
+      "/images/products/876-6/876_1_.jpg"
+    ]
   }
 }
