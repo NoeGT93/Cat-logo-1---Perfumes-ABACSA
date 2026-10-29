@@ -292,5 +292,12 @@
       "/images/products/55-0/55_2_.jpg",
       "/images/products/55-0/55_1_.jpg"
     ]
+  },
+  "885-6": {
+    "mainImage": "/images/products/885-6/885-6_1_.jpg",
+    "gallery": [
+      "/images/products/885-6/885-6_1_.jpg",
+      "/images/products/885-6/885-6_2_.jpg"
+    ]
   }
 }
