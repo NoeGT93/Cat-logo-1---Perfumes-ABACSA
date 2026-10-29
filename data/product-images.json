@@ -221,5 +221,12 @@
       "/images/products/890-8/890-8_3_.jpg",
       "/images/products/890-8/890-8_1_.jpg"
     ]
+  },
+  "797-0": {
+    "mainImage": "/images/products/797-0/797_1_.jpg",
+    "gallery": [
+      "/images/products/797-0/797_2_.jpg",
+      "/images/products/797-0/797_1_.jpg"
+    ]
   }
 }
