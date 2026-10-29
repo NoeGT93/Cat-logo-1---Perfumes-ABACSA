@@ -190,5 +190,13 @@
       "/images/products/COD_339-0/339_2_.jpg",
       "/images/products/COD_339-0/339_1_.jpg"
     ]
+  },
+  "855-0": {
+    "mainImage": "/images/products/855-0/855_3_.jpg",
+    "gallery": [
+      "/images/products/855-0/855_3_.jpg",
+      "/images/products/855-0/855_1_.jpg",
+      "/images/products/855-0/855_2_.jpg"
+    ]
   }
 }
