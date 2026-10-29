@@ -241,5 +241,12 @@
       "/images/products/438-0/438_3_.jpg",
       "/images/products/438-0/438_1_.jpg"
     ]
+  },
+  "249-0": {
+    "mainImage": "/images/products/249-0/249_2_.jpg",
+    "gallery": [
+      "/images/products/249-0/249_1_.jpg",
+      "/images/products/249-0/249_2_.jpg"
+    ]
   }
 }
