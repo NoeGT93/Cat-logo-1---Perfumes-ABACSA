@@ -198,5 +198,12 @@
       "/images/products/855-0/855_1_.jpg",
       "/images/products/855-0/855_2_.jpg"
     ]
+  },
+  "849-0": {
+    "mainImage": "/images/products/849-0/849_1_.jpg",
+    "gallery": [
+      "/images/products/849-0/849_1_.jpg",
+      "/images/products/849-0/849_2_.jpg"
+    ]
   }
 }
