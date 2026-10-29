@@ -277,5 +277,13 @@
       "/images/products/715-0/715_1_.jpg",
       "/images/products/715-0/715_2_.jpg"
     ]
+  },
+  "888-6": {
+    "mainImage": "/images/products/888-6/888-6_1_.jpg",
+    "gallery": [
+      "/images/products/888-6/888-6_3_.jpg",
+      "/images/products/888-6/888-6_1_.jpg",
+      "/images/products/888-6/888-6_2_.jpg"
+    ]
   }
 }
