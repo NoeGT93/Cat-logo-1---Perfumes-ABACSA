@@ -97,5 +97,13 @@
       "/images/products/235-11/235-11_2_.jpg",
       "/images/products/235-11/235-11_3_.jpg"
     ]
+  },
+  "64-0": {
+    "mainImage": "/images/products/64-0/64-0_3_.jpg",
+    "gallery": [
+      "/images/products/64-0/64-0_2_.jpg",
+      "/images/products/64-0/64-0_3_.jpg",
+      "/images/products/64-0/64-0_1_.jpg"
+    ]
   }
 }
