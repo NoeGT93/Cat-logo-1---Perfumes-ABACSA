@@ -266,14 +266,12 @@ export default function AdminImages() {
                   <p className="muted">Revisa las fotos antes de publicar. Marca cuál será la principal.</p>
                   <ul className="admin-gallery">
                     {pending.map((p) => {
-                      const replaces = current.gallery.some((u) => u.endsWith("/" + p.file.name));
                       return (
                         <li key={p.id} className={p.id === pendingMain ? "is-main" : ""}>
                           <span className="admin-gallery-img"><img src={p.preview} alt="" /></span>
                           <span className="fname" title={p.file.name}>{p.file.name}</span>
                           <span className="fmeta">{p.size} · {kb(p.file.size)}</span>
                           {!p.ratioOk && <span className="warn">No es 4:3: puede recortarse</span>}
-                          {replaces && <span className="warn">Reemplazará la foto con el mismo nombre</span>}
                           <label className="radio">
                             <input type="radio" name="pending-main" checked={p.id === pendingMain} onChange={() => setPendingMain(p.id)} /> Principal
                           </label>

@@ -11,8 +11,9 @@ export async function GET(req, { params }) {
   const etag = obj.httpEtag;
   const headers = {
     "Content-Type": obj.httpMetadata?.contentType || "application/octet-stream",
-    // 1 h en el navegador y la CDN; si el admin reemplaza una foto con el mismo nombre se ve en < 1 h.
-    "Cache-Control": "public, max-age=3600, stale-while-revalidate=86400",
+    // Fotos subidas desde el admin: nombre con huella del contenido (foto-1a2b3c4d.jpg) → nunca cambian, caché de 1 año.
+    // Fotos migradas con su nombre original: caché corta.
+    "Cache-Control": /-[0-9a-f]{8}\.\w+$/i.test(url) ? "public, max-age=31536000, immutable" : "public, max-age=600",
     ETag: etag,
     "X-Content-Type-Options": "nosniff",
   };
