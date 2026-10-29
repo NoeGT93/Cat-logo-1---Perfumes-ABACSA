@@ -7,8 +7,8 @@ import ProductCard from "@/components/ProductCard";
 // Productos cuyas fotos principales (perfumes) forman la composición del banner (cambiar aquí).
 const HERO_CODES = ["238-0", "235-2", "642-0"];
 
-export default function Home() {
-  const products = getProducts();
+export default async function Home() {
+  const products = await getProducts();
   const withPhoto = products.filter((p) => p.mainImage);
   // Destacados: 12 productos (3 filas en escritorio), primero los que tienen foto, en el orden del Excel.
   const featured = [...withPhoto, ...products.filter((p) => !p.mainImage)].slice(0, 12);

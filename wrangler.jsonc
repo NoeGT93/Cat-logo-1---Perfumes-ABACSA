@@ -1,0 +1,15 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "catalogo-abacsa",
+  "main": ".open-next/worker.js",
+  "compatibility_date": "2026-10-01",
+  "compatibility_flags": ["nodejs_compat", "global_fetch_strictly_public"],
+  "assets": { "directory": ".open-next/assets", "binding": "ASSETS" },
+  "services": [{ "binding": "WORKER_SELF_REFERENCE", "service": "catalogo-abacsa" }],
+  // Fotografías y su asociación con los códigos (lib/photos.js)
+  "r2_buckets": [{ "binding": "PHOTOS", "bucket_name": "abacsa-fotos" }],
+  // Máx. 10 intentos de inicio de sesión del admin por minuto (app/api/admin/session)
+  "ratelimits": [{ "name": "LOGIN_LIMITER", "namespace_id": "1001", "simple": { "limit": 10, "period": 60 } }],
+  "observability": { "enabled": true }
+  // Secreto (no va en el repositorio): npx wrangler secret put ADMIN_PASSWORD
+}

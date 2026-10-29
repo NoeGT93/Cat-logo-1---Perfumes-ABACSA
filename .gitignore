@@ -1,3 +1,7 @@
 node_modules
 .next
 .env*.local
+.open-next
+.wrangler
+.dev.vars
+.wrangler-migrate.jsonc

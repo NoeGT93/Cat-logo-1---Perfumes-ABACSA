@@ -1,7 +1,7 @@
 // Convierte el Excel de precios en data/products.json.
 // Uso: npm run import -- [ruta.xlsx]   (por defecto ./PERFUME.xlsx)
 // Solo lee el Excel; nunca lo modifica. product-categories.json solo recibe
-// los códigos nuevos (las correcciones manuales se conservan).
+// los códigos nuevos (las correcciones manuales se conservan). Las fotos viven en R2 y no se tocan.
 import fs from "node:fs";
 import XLSX from "xlsx";
 
@@ -60,7 +60,5 @@ const cats = fs.existsSync(catFile) ? JSON.parse(fs.readFileSync(catFile, "utf8"
 for (const p of products) cats[p.code] ??= infer(p.description);
 fs.writeFileSync(catFile, JSON.stringify(cats, null, 2) + "\n");
 
-const imgFile = "data/product-images.json";
-if (!fs.existsSync(imgFile)) fs.writeFileSync(imgFile, "{}\n");
 
 console.log(`${products.length} productos importados desde ${file}`);

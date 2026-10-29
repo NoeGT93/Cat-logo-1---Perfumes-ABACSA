@@ -11,13 +11,9 @@ const Chevron = () => (
   </svg>
 );
 
-export function generateStaticParams() {
-  return getProducts().map((p) => ({ code: p.code }));
-}
-
 // og:image = foto principal: es la vista previa que WhatsApp muestra al compartir el enlace.
 export async function generateMetadata({ params }) {
-  const p = getProduct(decodeURIComponent((await params).code));
+  const p = await getProduct(decodeURIComponent((await params).code));
   if (!p) return { title: "Producto — ABACSA" };
   const title = `${p.name} (${p.code}) — ABACSA`;
   const price = refPrice(p);
@@ -38,7 +34,7 @@ function related(product, all, n = 4) {
 
 export default async function ProductPage({ params }) {
   const code = decodeURIComponent((await params).code);
-  const all = getProducts();
+  const all = await getProducts();
   const product = all.find((p) => p.code === code);
   if (!product) notFound();
   const cat = CATEGORIES.find((c) => c.key === product.category);

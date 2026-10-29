@@ -6,14 +6,19 @@
     "build": "next build",
     "start": "next start",
     "import": "node scripts/import-excel.mjs",
-    "test": "node scripts/test-pricing.mjs && node scripts/test-admin-auth.mjs && node scripts/test-admin-github.mjs"
+    "test": "node scripts/test-pricing.mjs && node scripts/test-admin-auth.mjs && node scripts/test-photos.mjs",
+    "preview": "opennextjs-cloudflare build && opennextjs-cloudflare preview",
+    "deploy": "opennextjs-cloudflare build && opennextjs-cloudflare deploy",
+    "migrate-photos": "node scripts/migrate-photos-to-r2.mjs"
   },
   "dependencies": {
+    "@opennextjs/cloudflare": "^1.20.14",
     "next": "^15.5.28",
     "react": "^19.3.1",
     "react-dom": "^19.3.1"
   },
   "devDependencies": {
+    "wrangler": "^4.155.0",
     "xlsx": "^0.18.5"
   }
 }

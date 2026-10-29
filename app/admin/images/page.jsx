@@ -4,10 +4,21 @@ import { CATEGORIES } from "@/lib/config";
 
 const API = "/api/admin/images";
 const MAX_SIDE = 1600;
-const MAX_REQUEST = 4 * 1024 * 1024; // Vercel acepta ~4.5 MB por envío
+const MAX_REQUEST = 8 * 1024 * 1024; // envíos de hasta 8 MB (varias fotos en uno)
+const THUMB = 640;
+
+// Dibuja la imagen en un canvas del tamaño indicado (fondo blanco para PNG transparentes).
+function draw(bmp, w, h, type, quality) {
+  const canvas = Object.assign(document.createElement("canvas"), { width: w, height: h });
+  const ctx = canvas.getContext("2d");
+  ctx.fillStyle = "#fff";
+  ctx.fillRect(0, 0, w, h);
+  ctx.drawImage(bmp, 0, 0, w, h);
+  return new Promise((r) => canvas.toBlob(r, type, quality));
+}
 
 // Reduce la foto en el navegador (lado mayor 1600 px, JPG) para subir rápido y dentro del límite.
-// Las fotos ya preparadas (JPG ≤ 1600 px y < 1.5 MB) se envían tal cual.
+// Las fotos ya preparadas (JPG ≤ 1600 px y < 1.5 MB) se envían tal cual. También genera la miniatura WebP de 640 px.
 async function prepare(file) {
   const bmp = await createImageBitmap(file);
   const { width: w, height: h } = bmp;
@@ -15,18 +26,17 @@ async function prepare(file) {
   let blob = file;
   if (!ready) {
     const s = Math.min(1, MAX_SIDE / Math.max(w, h));
-    const canvas = Object.assign(document.createElement("canvas"), { width: Math.round(w * s), height: Math.round(h * s) });
-    const ctx = canvas.getContext("2d");
-    ctx.fillStyle = "#fff";
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-    ctx.drawImage(bmp, 0, 0, canvas.width, canvas.height);
-    blob = await new Promise((r) => canvas.toBlob(r, "image/jpeg", 0.88));
+    blob = await draw(bmp, Math.round(w * s), Math.round(h * s), "image/jpeg", 0.88);
   }
+  const t = Math.min(1, THUMB / Math.max(w, h));
+  const thumbBlob = await draw(bmp, Math.round(w * t), Math.round(h * t), "image/webp", 0.8);
   bmp.close?.();
   const name = file.name.replace(/\.[^.]+$/, "").replace(/[^\w.-]+/g, "_") + ".jpg";
   return {
     id: crypto.randomUUID(),
     file: new File([blob], name, { type: "image/jpeg" }),
+    // Safari antiguo puede no generar WebP: entonces se omite y se sirve la foto completa.
+    thumb: thumbBlob?.type === "image/webp" ? new File([thumbBlob], name + ".webp", { type: "image/webp" }) : null,
     preview: URL.createObjectURL(blob),
     size: `${w}×${h}`,
     ratioOk: Math.abs(w / h - 4 / 3) < 0.04,
@@ -37,7 +47,8 @@ const kb = (n) => `${Math.round(n / 1024)} KB`;
 const catLabel = (k) => CATEGORIES.find((c) => c.key === k)?.label ?? "Sin categoría";
 
 export default function AdminImages() {
-  const [data, setData] = useState(null); // { mode, previewBase, products, map }
+  const [data, setData] = useState(null); // { products, map }
+  const [loadedAt, setLoadedAt] = useState(0);
   const [auth, setAuth] = useState("checking"); // checking | login | ok
   const [selected, setSelected] = useState(null);
   const [query, setQuery] = useState("");
@@ -53,6 +64,7 @@ export default function AdminImages() {
     if (res.status === 401) return setAuth("login");
     if (!res.ok) throw new Error(json.error || `Error ${res.status}`);
     setData(json);
+    setLoadedAt(Date.now());
     setAuth("ok");
     if (okText) setStatus({ type: "ok", text: okText });
   }
@@ -83,8 +95,9 @@ export default function AdminImages() {
   }, [products, query, tab]);
 
   const current = products.find((p) => p.code === selected);
-  const src = (url) => (data?.previewBase ?? "") + url;
-  const savedText = data?.mode === "github" ? "Guardado. El sitio se actualiza en aprox. 1 minuto." : "Guardado.";
+  // ?w=640: miniatura (o la foto completa si no tiene). La marca de tiempo evita ver una versión anterior en caché.
+  const src = (url) => `${url}?w=640&v=${loadedAt}`;
+  const savedText = "Ya está visible en el catálogo.";
 
   function select(code) {
     clearPending();
@@ -129,7 +142,10 @@ export default function AdminImages() {
         const fd = new FormData();
         fd.append("code", selected);
         if (main && b.items.some((p) => p.file.name === main)) fd.append("main", main);
-        b.items.forEach((p) => fd.append("files", p.file));
+        b.items.forEach((p) => {
+          fd.append("files", p.file);
+          if (p.thumb) fd.append("thumbs", p.thumb);
+        });
         await call({ method: "POST", body: fd });
       }
       clearPending();
@@ -165,7 +181,7 @@ export default function AdminImages() {
           <h1 className="page-title">Fotografías de productos</h1>
           <p className="muted">
             {counts.with} de {counts.all} productos con fotografía ·{" "}
-            {data.mode === "github" ? "Los cambios se publican en el sitio (≈ 1 min)." : "Modo local: los cambios se guardan en esta computadora."}
+            Los cambios se ven en el catálogo al instante.
           </p>
         </div>
         <button className="btn btn-secondary" onClick={async () => { await fetch("/api/admin/session", { method: "DELETE" }); setAuth("login"); }}>

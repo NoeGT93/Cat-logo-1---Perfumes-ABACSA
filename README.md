@@ -1,13 +1,22 @@
 # Catálogo ABACSA
 
-Sitio publicado: https://cat-logo-1-perfumes-abacsa.vercel.app
-
 Catálogo digital comercial: Facebook / Instagram → catálogo → pedido → WhatsApp (+502 4031-7724).
-Sin pagos, login ni registro. Next.js 15, sin otras dependencias de UI.
+Sin pagos, login ni registro de clientes. Next.js 15 en **Cloudflare Workers** (adaptador OpenNext), fotos en **Cloudflare R2**.
+
+```
+GitHub (código, productos, precios) ──push──> Cloudflare Workers Builds ──> Worker
+Admin /admin ──────────────────────────────> R2 (fotos + asociación)   ← sin commits ni deploys
+```
+
+## Desarrollo
 
 ```bash
 npm install
-npm run dev        # http://localhost:3000
+cp .env.example .dev.vars          # contraseña local del admin
+npm run migrate-photos             # carga las fotos de migration/ al R2 local (una vez)
+npm run dev                        # http://localhost:3000
+npm run preview                    # runtime real de Workers en local
+npm test
 ```
 
 ## Estructura
@@ -15,62 +24,50 @@ npm run dev        # http://localhost:3000
 | Ruta | Qué es |
 | --- | --- |
 | `data/products.json` | 40 productos generados desde `PERFUME.xlsx` (no editar a mano) |
-| `data/product-categories.json` | Código → `kits` / `duos` / `perfumes` / `colonias`. Inferido de la descripción; **corregir aquí a mano** |
-| `data/product-images.json` | Código → `{ mainImage, gallery }` |
-| `public/images/products/<código>/` | Fotografías con su nombre original |
-| `lib/config.js` | WhatsApp, filtros, etiquetas de precios |
-| `lib/catalog.js` | Única lectura de datos (reemplazar aquí por API/BD/ERP en el futuro) |
-| `/admin` | Administrador de fotografías (con contraseña; guarda en GitHub) |
+| `data/product-categories.json` | Código → `kits` / `duos` / `perfumes` / `colonias`. **Corregir aquí a mano** |
+| `lib/catalog.js` | Productos + fotos (lee R2 en cada visita) |
+| `lib/photos.js` | Acceso a R2: fotos, miniaturas y asociación código → fotos |
+| `app/images/products/[...path]` | Sirve las fotos desde R2 en `/images/products/<código>/<nombre>` (`?w=640` = miniatura) |
+| `lib/image-loader.js` | Cargador de `next/image`: miniatura ≤ 640 px, foto completa para pantallas grandes |
+| `/admin` | Administrador de fotografías (contraseña; guarda en R2) |
+| `migration/` | Copia de las fotos y la asociación tal como estaban en GitHub/Vercel (respaldo) |
+| `wrangler.jsonc` | Configuración de Cloudflare (bucket R2 `abacsa-fotos`, límite de intentos de login) |
+
+### R2
+
+| Clave | Contenido |
+| --- | --- |
+| `products/<código>/<nombre>` | Foto completa (≤ 1600 px) |
+| `thumbs/<código>/<nombre>.webp` | Miniatura 640 px (el admin la genera en el navegador) |
+| `meta/product-images.json` | `{ código: { mainImage, gallery } }` — escrituras condicionadas (no se pisan) |
 
 ## Actualizar precios desde el Excel
 
-1. Reemplazar `PERFUME.xlsx` en la raíz del proyecto (o indicar otra ruta).
-2. Ejecutar:
-   ```bash
-   npm run import
-   # o: npm run import -- "C:/ruta/a/otro.xlsx"
-   ```
-3. Se regenera `data/products.json`. Las categorías corregidas a mano y las fotos asociadas **se conservan**; los códigos nuevos reciben categoría inferida.
-
-El Excel nunca se modifica. Campos vacíos → `null`; un precio `null` no se muestra.
+1. Reemplazar `PERFUME.xlsx` y ejecutar `npm run import`.
+2. Hacer commit y push: Cloudflare publica la nueva versión. Las fotos (R2) no se tocan.
 
 ## Fotografías
 
-- **Desde la web:** `https://cat-logo-1-perfumes-abacsa.vercel.app/admin` → contraseña → elegir producto → “Elegir fotos” → revisar y marcar la principal → “Publicar”. También “Hacer principal” y “Quitar”.
-  Cada acción es un commit en este repositorio (`public/images/products/<código>/` + `data/product-images.json`) y Vercel republica en ≈ 1 minuto. El navegador reduce las fotos a 1600 px (JPG) antes de subirlas.
-- **En local:** `npm run dev` → `/admin` (sin contraseña si no hay `ADMIN_PASSWORD`; guarda en el disco, luego hacer commit).
-- **Desde la terminal / Claude:**
-  ```bash
-  node scripts/assign-images.mjs 595-0 fotos/DSC_5736.jpg fotos/DSC_5737.jpg --main DSC_5736.jpg
-  ```
-
-Productos sin foto muestran un placeholder.
-
-### Configuración del admin web (Vercel → Settings → Environment Variables)
-
-| Variable | Valor |
-| --- | --- |
-| `ADMIN_PASSWORD` | Contraseña del admin (larga; cambiarla cierra todas las sesiones) |
-| `GITHUB_TOKEN` | Token *fine-grained* de GitHub, solo para este repositorio, permiso **Contents: Read and write** |
-| `GITHUB_REPO` | `NoeGT93/Cat-logo-1---Perfumes-ABACSA` |
-| `GITHUB_BRANCH` | `main` (opcional) |
-
-Después de guardarlas: Deployments → último → Redeploy. Las miniaturas del admin se leen de `raw.githubusercontent.com` (el repositorio debe seguir siendo público). Pruebas: `npm test`.
+`/admin` → contraseña → elegir producto → “Elegir fotos” → revisar y marcar la principal → “Publicar”. También “Hacer principal” y “Quitar”. Los cambios se ven **al instante**, sin deploy. El navegador reduce las fotos a 1600 px (JPG) y genera la miniatura WebP de 640 px.
 
 ## Precios
 
-Escalas por producto (mismo código), en `lib/config.js` (`DOZEN_QTY`, `BUNDLE_QTY`):
-
-| Cantidad | Precio |
+| Cantidad (mismo código) | Precio |
 | --- | --- |
 | 1–11 | Unidad |
 | 12–23 | Docena |
-| 24+ | Fardo (si no existe, Distribuidor: son la misma escala) |
+| 24+ | Fardo (si no existe, Distribuidor) |
 
-El pedido suma automáticamente con la escala que corresponde a cada producto y lo presenta como **total estimado**; ABACSA confirma por WhatsApp. Verificación: `npm test`.
+El pedido suma con la escala de cada producto y lo presenta como **total estimado**; ABACSA confirma por WhatsApp.
 
-## WhatsApp con foto
+## Publicar en Cloudflare (una vez)
 
-WhatsApp no permite adjuntar fotos desde un enlace `wa.me`. El mensaje incluye un enlace por producto y WhatsApp muestra su foto como vista previa.
+```bash
+npx wrangler login
+npx wrangler r2 bucket create abacsa-fotos
+npm run migrate-photos -- --remote
+npx wrangler secret put ADMIN_PASSWORD
+npm run deploy
+```
 
-Las fotos del banner de inicio se eligen en `HERO_CODES` (`app/page.jsx`).
+Después, en Cloudflare → Workers → `catalogo-abacsa` → Settings → Builds: conectar el repositorio de GitHub para que cada push publique solo.

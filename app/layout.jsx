@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { headers } from "next/headers";
 import { Inter, Poppins } from "next/font/google";
 import { CartProvider } from "@/components/Cart";
 import Header from "@/components/Header";
@@ -10,11 +11,18 @@ import "./globals.css";
 const sans = Inter({ subsets: ["latin"], variable: "--font-sans", display: "swap" });
 const display = Poppins({ subsets: ["latin"], weight: ["500", "600", "700"], variable: "--font-display", display: "swap" });
 
-export const metadata = {
-  ...(SITE_URL && { metadataBase: new URL(SITE_URL) }),
-  title: "Catálogo ABACSA",
-  description: "Encuentra lo que necesitas y descubre mucho más. Compra al detalle o por mayor y pide por WhatsApp.",
-};
+// metadataBase = dominio desde el que se visita (o NEXT_PUBLIC_SITE_URL): las vistas previas de
+// WhatsApp/Facebook usan URLs absolutas de las fotos.
+export async function generateMetadata() {
+  const h = await headers();
+  const host = h.get("x-forwarded-host") || h.get("host");
+  const base = SITE_URL || (host ? `${h.get("x-forwarded-proto") || "https"}://${host}` : undefined);
+  return {
+    ...(base && { metadataBase: new URL(base) }),
+    title: "Catálogo ABACSA",
+    description: "Encuentra lo que necesitas y descubre mucho más. Compra al detalle o por mayor y pide por WhatsApp.",
+  };
+}
 
 export const viewport = {
   width: "device-width",
@@ -24,9 +32,12 @@ export const viewport = {
   themeColor: "#ffffff",
 };
 
-export default function RootLayout({ children }) {
+// Todas las páginas leen las fotos de R2 en cada visita (sin deploy al cambiar fotos).
+export const dynamic = "force-dynamic";
+
+export default async function RootLayout({ children }) {
   // Solo lo que el pedido necesita para mostrar nombre, foto y precio.
-  const products = getProducts().map(({ code, name, mainImage, prices, fromPrice }) => ({ code, name, mainImage, prices, fromPrice }));
+  const products = (await getProducts()).map(({ code, name, mainImage, prices, fromPrice }) => ({ code, name, mainImage, prices, fromPrice }));
   return (
     <html lang="es" className={`${sans.variable} ${display.variable}`}>
       <body>

@@ -13,7 +13,7 @@ export default async function CatalogPage({ searchParams }) {
         <h1 className="page-title">{CATEGORIES.find((c) => c.key === cat)?.label ?? "Todos los productos"}</h1>
         <p className="muted">Precio por unidad. Desde 12 u. del mismo producto aplica precio de docena y desde 24 u., de fardo.</p>
       </div>
-      <Catalog key={`${q}|${cat}`} products={getProducts()} initialQuery={q} initialCategory={cat} />
+      <Catalog key={`${q}|${cat}`} products={await getProducts()} initialQuery={q} initialCategory={cat} />
     </section>
   );
 }
