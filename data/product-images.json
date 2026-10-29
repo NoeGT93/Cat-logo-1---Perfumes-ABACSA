@@ -219,5 +219,12 @@
       "/images/products/797-0/797_2_.jpg",
       "/images/products/797-0/797_1_.jpg"
     ]
+  },
+  "235-2": {
+    "mainImage": "/images/products/235-2/235-3_1_.jpg",
+    "gallery": [
+      "/images/products/235-2/235-3_3_.jpg",
+      "/images/products/235-2/235-3_1_.jpg"
+    ]
   }
 }
