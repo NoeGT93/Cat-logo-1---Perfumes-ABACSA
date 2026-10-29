@@ -285,5 +285,12 @@
       "/images/products/888-6/888-6_1_.jpg",
       "/images/products/888-6/888-6_2_.jpg"
     ]
+  },
+  "55-0": {
+    "mainImage": "/images/products/55-0/55_2_.jpg",
+    "gallery": [
+      "/images/products/55-0/55_2_.jpg",
+      "/images/products/55-0/55_1_.jpg"
+    ]
   }
 }
