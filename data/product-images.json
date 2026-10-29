@@ -183,5 +183,12 @@
       "/images/products/451-0/451_2_.jpg",
       "/images/products/451-0/451_3_.jpg"
     ]
+  },
+  "COD 339-0": {
+    "mainImage": "/images/products/COD_339-0/339_1_.jpg",
+    "gallery": [
+      "/images/products/COD_339-0/339_2_.jpg",
+      "/images/products/COD_339-0/339_1_.jpg"
+    ]
   }
 }
