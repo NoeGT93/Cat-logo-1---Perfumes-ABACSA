@@ -105,5 +105,12 @@
       "/images/products/64-0/64-0_3_.jpg",
       "/images/products/64-0/64-0_1_.jpg"
     ]
+  },
+  "142-0": {
+    "mainImage": "/images/products/142-0/142-0_1_.jpg",
+    "gallery": [
+      "/images/products/142-0/142-0_2_.jpg",
+      "/images/products/142-0/142-0_1_.jpg"
+    ]
   }
 }
