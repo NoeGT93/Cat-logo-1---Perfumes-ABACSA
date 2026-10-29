@@ -213,5 +213,13 @@
       "/images/products/831-0/831_1_.jpg",
       "/images/products/831-0/831_2_.jpg"
     ]
+  },
+  "890-8": {
+    "mainImage": "/images/products/890-8/890-8_1_.jpg",
+    "gallery": [
+      "/images/products/890-8/890-8_2_.jpg",
+      "/images/products/890-8/890-8_3_.jpg",
+      "/images/products/890-8/890-8_1_.jpg"
+    ]
   }
 }
