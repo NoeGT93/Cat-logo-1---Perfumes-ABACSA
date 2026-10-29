@@ -80,5 +80,14 @@
       "/images/products/213-0/213_3_.jpg",
       "/images/products/213-0/213_1_.jpg"
     ]
+  },
+  "235-12": {
+    "mainImage": "/images/products/235-12/235-12.jpg",
+    "gallery": [
+      "/images/products/235-12/DSC_5755.JPG_32b89712.jpg",
+      "/images/products/235-12/DSC_5758.JPG_4e5597e9.jpg",
+      "/images/products/235-12/DSC_5757.JPG_69b00393.jpg",
+      "/images/products/235-12/235-12.jpg"
+    ]
   }
 }
