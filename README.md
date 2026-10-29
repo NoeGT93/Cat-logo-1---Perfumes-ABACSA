@@ -70,4 +70,4 @@ npx wrangler secret put ADMIN_PASSWORD
 npm run deploy
 ```
 
-Después, en Cloudflare → Workers → `catalogo-abacsa` → Settings → Builds: conectar el repositorio de GitHub para que cada push publique solo.
+Publicación automática (Workers Builds) conectada a la rama `cloudflare`: cada push compila y publica solo. Las fotos (admin → R2) no generan builds.
