@@ -248,5 +248,12 @@
       "/images/products/249-0/249_1_.jpg",
       "/images/products/249-0/249_2_.jpg"
     ]
+  },
+  "573-0": {
+    "mainImage": "/images/products/573-0/DSC_5770.JPG_7b1b9aa8.jpg",
+    "gallery": [
+      "/images/products/573-0/DSC_5769.JPG_4e27321a.jpg",
+      "/images/products/573-0/DSC_5770.JPG_7b1b9aa8.jpg"
+    ]
   }
 }
