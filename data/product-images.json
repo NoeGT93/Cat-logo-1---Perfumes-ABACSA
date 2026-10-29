@@ -270,5 +270,12 @@
       "/images/products/477-0/477-0_1_.jpg",
       "/images/products/477-0/477-0_2_.jpg"
     ]
+  },
+  "715-0": {
+    "mainImage": "/images/products/715-0/715_1_.jpg",
+    "gallery": [
+      "/images/products/715-0/715_1_.jpg",
+      "/images/products/715-0/715_2_.jpg"
+    ]
   }
 }
